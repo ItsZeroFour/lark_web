@@ -6,7 +6,6 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Card } from "@/components/ui/Card";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { Glow } from "@/components/ui/Glow";
 import { revealViewport, staggerContainer } from "@/hooks/useReveal";
 import { services } from "@/data/services";
 
@@ -19,48 +18,44 @@ const icons: Record<string, IconName> = {
 
 export function Services() {
   return (
-    <Section id="services">
-      <Glow className="top-10 left-1/2 -translate-x-1/2" size={520} />
-
+    <Section id="services" divided>
       <SectionHeading
         eyebrow="02 — Услуги"
         title="Четыре направления, <em>одна</em> команда"
-        description="Мы закрываем полный цикл цифровой работы — без передачи задач между подрядчиками."
+        description="Закрываем полный цикл цифровой работы — без передачи задач между подрядчиками."
       />
 
       <motion.div
-        variants={staggerContainer(0.12)}
+        variants={staggerContainer(0.09)}
         initial="hidden"
         whileInView="visible"
         viewport={revealViewport}
-        className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+        className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
       >
         {services.map((service) => {
           const inner = (
             <Card
               interactive={!service.featured}
               featured={service.featured}
-              className="flex h-full flex-col gap-5"
+              className="flex h-full flex-col gap-4"
             >
               <div className="flex items-start justify-between">
-                <span
-                  className="grid h-12 w-12 place-items-center rounded-xl border border-border
-                             bg-bg text-accent transition-colors duration-300
-                             group-hover:border-accent/50"
-                >
-                  <Icon name={icons[service.id]} size={22} />
+                <span className="grid h-11 w-11 place-items-center rounded-xl
+                                 border border-border bg-bg text-accent">
+                  <Icon name={icons[service.id]} size={20} />
                 </span>
-                <span className="t-mono text-sm text-text-muted">
+                <span className="t-mono text-sm text-text-faint">
                   {service.index}
                 </span>
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <h3 className="t-card font-display">{service.title}</h3>
                 {service.status && (
-                  <span className="t-meta inline-flex w-fit items-center gap-1.5
-                                   rounded-full border border-accent/40 px-2.5 py-1 text-accent">
-                    <span className="h-1.5 w-1.5 rounded-full bg-accent anim-glow" />
+                  <span className="t-meta inline-flex items-center gap-1.5
+                                   rounded-full border border-accent/40 px-2 py-0.5
+                                   text-[0.62rem] text-accent">
+                    <span className="h-1.5 w-1.5 rounded-full bg-accent" />
                     {service.status}
                   </span>
                 )}
@@ -70,7 +65,7 @@ export function Services() {
                 {service.summary}
               </p>
 
-              <ul className="mt-auto flex flex-col gap-2 border-t border-border pt-4">
+              <ul className="mt-auto flex flex-col gap-1.5 border-t border-border pt-4">
                 {service.capabilities.map((cap) => (
                   <li
                     key={cap}
@@ -81,10 +76,16 @@ export function Services() {
                   </li>
                 ))}
               </ul>
+
+              {service.featured && (
+                <span className="flex items-center gap-1.5 text-sm font-medium text-accent">
+                  Открыть Larkins
+                  <Icon name="arrow-right" size={14} />
+                </span>
+              )}
             </Card>
           );
 
-          // Larkins links through to its dedicated page.
           return service.featured ? (
             <Link
               key={service.id}

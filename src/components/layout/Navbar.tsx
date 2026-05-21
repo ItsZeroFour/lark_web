@@ -9,7 +9,6 @@ import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { label: "Кто мы", href: "/#about" },
   { label: "Услуги", href: "/#services" },
   { label: "Процесс", href: "/#process" },
   { label: "Работы", href: "/#portfolio" },
@@ -21,9 +20,8 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // Glass treatment kicks in after a short scroll.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 20);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -38,40 +36,38 @@ export function Navbar() {
   }, [open]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-5">
-      <motion.nav
-        initial={{ y: -28, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4 sm:pt-4">
+      <nav
         className={cn(
-          "shell flex items-center justify-between rounded-full",
-          "transition-[background,border-color,box-shadow] duration-400 ease-cinematic",
-          "h-16 !px-4 sm:!px-6",
-          scrolled
-            ? "glass border border-border shadow-elevated"
-            : "border border-transparent bg-transparent",
+          "shell flex h-14 items-center justify-between rounded-2xl !px-3 sm:h-16 sm:!px-5",
+          "transition-[background-color,border-color,box-shadow] duration-300 ease-cinematic",
+          scrolled || open
+            ? "floating shadow-float"
+            : "border border-transparent",
         )}
       >
         {/* Wordmark */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 cursor-pointer"
-          aria-label="Lark Freelance — на главную"
           onClick={() => setOpen(false)}
+          aria-label="Lark Freelance — на главную"
+          className="flex items-center gap-2.5 cursor-pointer"
         >
-          <LarkMark />
-          <span className="font-display text-xl tracking-tight">
-            Lark<span className="amber"> Freelance</span>
+          <span className="grid h-8 w-8 place-items-center rounded-lg bg-accent">
+            <Icon name="wing" size={17} className="text-accent-ink" />
+          </span>
+          <span className="font-display text-lg tracking-tight">
+            Lark<span className="text-text-muted"> Freelance</span>
           </span>
         </Link>
 
         {/* Desktop links */}
-        <ul className="hidden items-center gap-1 lg:flex">
+        <ul className="hidden items-center gap-0.5 lg:flex">
           {navLinks.map((link) => (
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="rounded-full px-3.5 py-2 text-sm text-text-muted
+                className="rounded-lg px-3 py-2 text-sm text-text-muted
                            transition-colors duration-200 hover:text-text cursor-pointer"
               >
                 {link.label}
@@ -81,70 +77,58 @@ export function Navbar() {
         </ul>
 
         {/* Desktop actions */}
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           <ThemeToggle />
-          <Button href="/#contact" variant="primary" className="!px-5 !py-2.5 !min-h-0">
+          <Button href="/#contact">
             Обсудить проект
-            <Icon name="arrow-right" size={16} />
+            <Icon name="arrow-right" size={15} />
           </Button>
         </div>
 
         {/* Mobile controls */}
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex items-center gap-1.5 lg:hidden">
           <ThemeToggle />
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Закрыть меню" : "Открыть меню"}
             aria-expanded={open}
-            className="grid h-11 w-11 place-items-center rounded-full border border-border
-                       bg-bg-secondary/50 text-text cursor-pointer
-                       transition-colors hover:text-accent"
+            className="grid h-11 w-11 place-items-center rounded-xl border border-border
+                       text-text cursor-pointer transition-colors hover:text-accent"
           >
             <Icon name={open ? "close" : "menu"} size={20} />
           </button>
         </div>
-      </motion.nav>
+      </nav>
 
       {/* Mobile sheet */}
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -12 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="shell mt-3 overflow-hidden rounded-3xl glass border border-border
-                       p-4 lg:hidden"
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            className="shell mt-2 overflow-hidden rounded-2xl floating shadow-float p-3 lg:hidden"
           >
             <ul className="flex flex-col">
-              {navLinks.map((link, i) => (
-                <motion.li
-                  key={link.href}
-                  initial={{ opacity: 0, x: -16 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.05 * i, duration: 0.4 }}
-                >
+              {navLinks.map((link) => (
+                <li key={link.href}>
                   <Link
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className="flex items-center justify-between border-b border-border
-                               px-2 py-4 text-lg text-text cursor-pointer
-                               transition-colors hover:text-accent"
+                    className="flex items-center justify-between rounded-xl px-3 py-3.5
+                               text-base text-text cursor-pointer transition-colors
+                               hover:bg-bg-tertiary hover:text-accent"
                   >
                     {link.label}
-                    <Icon name="arrow-up-right" size={18} />
+                    <Icon name="arrow-up-right" size={17} className="text-text-faint" />
                   </Link>
-                </motion.li>
+                </li>
               ))}
             </ul>
-            <div className="pt-4">
-              <Button
-                href="/#contact"
-                variant="primary"
-                fullWidth
-                magnetic={false}
-              >
+            <div className="mt-2 px-1 pb-1">
+              <Button href="/#contact" size="lg" fullWidth>
                 Обсудить проект
                 <Icon name="arrow-right" size={16} />
               </Button>
@@ -153,19 +137,5 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </header>
-  );
-}
-
-/** Compact lark glyph used in the wordmark. */
-function LarkMark() {
-  return (
-    <span className="grid h-9 w-9 place-items-center rounded-xl border border-accent/40 bg-bg-secondary/60">
-      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          d="M4 18c6 0 10-3.2 12-9.6C17.2 12.8 19.6 15 23 15c-4.4 2.2-7.6 5.4-9.6 9.6C12.2 20.2 8.4 18 4 18Z"
-          fill="var(--accent)"
-        />
-      </svg>
-    </span>
   );
 }

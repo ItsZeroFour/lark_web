@@ -7,12 +7,13 @@ import { Process } from "@/components/sections/Process";
 import { Portfolio } from "@/components/sections/Portfolio";
 import { Team } from "@/components/sections/Team";
 import { Larkins } from "@/components/sections/Larkins";
+import { FAQ } from "@/components/sections/FAQ";
+import { Contact } from "@/components/sections/Contact";
 import { Freelancers } from "@/components/sections/Freelancers";
 
 /**
  * Lark Freelance — home.
- * Section order follows the master brief:
- * Hero → Кто мы → Услуги → Процесс → Портфолио → Команда → Larkins → Фрилансеры.
+ * Flow is built for conversion: value → proof → objections → contact.
  */
 export default function HomePage() {
   return (
@@ -20,13 +21,14 @@ export default function HomePage() {
       <Navbar />
       <main>
         <Hero />
-        <div className="hairline shell" />
         <About />
         <Services />
         <Process />
         <Portfolio />
         <Team />
         <Larkins />
+        <FAQ />
+        <Contact />
         <Freelancers />
       </main>
       <Footer />

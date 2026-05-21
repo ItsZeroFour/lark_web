@@ -3,15 +3,12 @@
 import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Glow } from "@/components/ui/Glow";
 import { revealVariants, revealViewport, staggerContainer } from "@/hooks/useReveal";
 import { team } from "@/data/team";
 
 export function Team() {
   return (
-    <Section id="team">
-      <Glow className="-top-10 left-[-6%]" size={420} />
-
+    <Section id="team" divided>
       <SectionHeading
         eyebrow="05 — Команда"
         title="Четыре человека. <em>Один</em> образ мышления"
@@ -19,52 +16,37 @@ export function Team() {
       />
 
       <motion.ul
-        variants={staggerContainer(0.12)}
+        variants={staggerContainer(0.09)}
         initial="hidden"
         whileInView="visible"
         viewport={revealViewport}
-        className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+        className="mt-10 grid gap-4 xs:grid-cols-2 lg:grid-cols-4"
       >
         {team.map((member) => (
           <motion.li
             key={member.id}
             variants={revealVariants("up")}
-            className="group relative overflow-hidden rounded-2xl border border-border
-                       bg-bg-secondary/40 p-7 transition-colors duration-300
-                       hover:border-accent/45"
+            className="group rounded-2xl surface p-5 transition-colors duration-300
+                       hover:border-border-strong"
           >
-            {/* Avatar plate */}
-            <div className="relative mb-6">
-              <div
-                className="grid aspect-square w-full place-items-center rounded-xl
-                           border border-border"
-                style={{
-                  background:
-                    "radial-gradient(circle at 35% 30%, var(--bg-tertiary), var(--bg))",
-                }}
-              >
-                <span className="font-display text-5xl text-text-muted
-                                 transition-colors duration-300 group-hover:text-accent">
-                  {member.monogram}
-                </span>
-                <div className="grid-field absolute inset-0 rounded-xl opacity-40" />
-              </div>
-              {/* Online dot */}
+            {/* Monogram plate */}
+            <div className="flex items-center justify-between">
               <span
-                className="absolute right-3 top-3 h-2.5 w-2.5 rounded-full bg-accent
-                           shadow-glow-sm"
+                className="grid h-14 w-14 place-items-center rounded-xl border border-border
+                           bg-bg-tertiary font-display text-xl text-text-muted
+                           transition-colors duration-300 group-hover:text-accent"
+              >
+                {member.monogram}
+              </span>
+              <span
+                className="h-2 w-2 rounded-full bg-accent"
                 aria-hidden="true"
               />
             </div>
 
-            <h3 className="font-display text-xl">{member.name}</h3>
+            <h3 className="mt-5 font-display text-lg">{member.name}</h3>
             <p className="mt-1 text-sm text-accent">{member.caption}</p>
-
-            {/* Trait — revealed on hover, height-stable */}
-            <p
-              className="mt-3 text-sm leading-relaxed text-text-muted opacity-0
-                         transition-opacity duration-300 group-hover:opacity-100"
-            >
+            <p className="mt-3 border-t border-border pt-3 text-sm leading-relaxed text-text-muted">
               {member.trait}
             </p>
           </motion.li>

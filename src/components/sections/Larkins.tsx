@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Glow } from "@/components/ui/Glow";
 import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/animations/Reveal";
 import {
@@ -18,12 +17,10 @@ interface DisplayMessage extends ChatMessage {
   id: number;
 }
 
-const INITIAL: DisplayMessage[] = [
-  { id: 0, role: "assistant", content: LARKINS_GREETING },
-];
-
 export function Larkins() {
-  const [messages, setMessages] = useState<DisplayMessage[]>(INITIAL);
+  const [messages, setMessages] = useState<DisplayMessage[]>([
+    { id: 0, role: "assistant", content: LARKINS_GREETING },
+  ]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
@@ -31,7 +28,7 @@ export function Larkins() {
   const logRef = useRef<HTMLDivElement>(null);
   const idRef = useRef(1);
 
-  // Keep the latest message in view inside the console only.
+  // Keep the latest message in view — inside the console only.
   useEffect(() => {
     const el = logRef.current;
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
@@ -62,7 +59,6 @@ export function Larkins() {
         }),
       });
       const data: { reply: string; done: boolean } = await res.json();
-
       setMessages((m) => [
         ...m,
         { id: idRef.current++, role: "assistant", content: data.reply },
@@ -75,7 +71,7 @@ export function Larkins() {
           id: idRef.current++,
           role: "assistant",
           content:
-            "Связь с Larkins прервалась. Напишите нам напрямую — hello@larkfreelance.dev",
+            "Связь прервалась. Напишите нам в Telegram — мы на связи.",
         },
       ]);
     } finally {
@@ -84,37 +80,40 @@ export function Larkins() {
   }
 
   function reset() {
-    setMessages([{ id: idRef.current++, role: "assistant", content: LARKINS_GREETING }]);
+    setMessages([
+      { id: idRef.current++, role: "assistant", content: LARKINS_GREETING },
+    ]);
     setDone(false);
     setInput("");
   }
 
   return (
-    <Section id="contact">
-      <Glow className="top-0 right-[10%]" size={520} pulse />
-
-      <div className="grid gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+    <Section id="larkins-brief" divided>
+      <div className="grid gap-9 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">
         {/* Narrative */}
-        <div className="flex flex-col gap-7">
+        <div className="flex flex-col gap-5">
           <SectionHeading
             eyebrow="06 — Larkins AI"
             title="Не чат-бот. <em>Слой интеллекта</em>"
           />
-          <Reveal delay={0.1}>
+          <Reveal delay={0.08}>
             <p className="t-body text-text-muted">
-              Larkins — это интеллектуальный слой агентства. Он собирает бриф,
-              задаёт правильные вопросы и передаёт задачу команде. Спокойно,
+              Larkins — интеллектуальный слой агентства. Он задаёт правильные
+              вопросы, собирает бриф и передаёт задачу команде. Спокойно,
               по делу, без канцелярщины.
             </p>
           </Reveal>
-          <Reveal delay={0.18}>
-            <ul className="flex flex-col gap-3">
+          <Reveal delay={0.14}>
+            <ul className="flex flex-col gap-2.5">
               {[
                 "Пять точных вопросов вместо длинной формы",
                 "Понятное саммари брифа сразу после диалога",
                 "Команда отвечает в течение часа",
               ].map((line) => (
-                <li key={line} className="flex items-start gap-3 text-sm text-text-muted">
+                <li
+                  key={line}
+                  className="flex items-start gap-2.5 text-sm text-text-muted"
+                >
                   <Icon name="check" size={16} className="mt-0.5 shrink-0 text-accent" />
                   {line}
                 </li>
@@ -124,28 +123,32 @@ export function Larkins() {
         </div>
 
         {/* Console */}
-        <Reveal direction="left" delay={0.1}>
-          <div className="overflow-hidden rounded-3xl glass border border-border shadow-elevated">
-            {/* Console header */}
-            <div className="flex items-center justify-between border-b border-border px-5 py-4">
-              <div className="flex items-center gap-3">
-                <ConsoleOrb active={busy} />
-                <div className="flex flex-col">
+        <Reveal direction="left" delay={0.08}>
+          <div className="overflow-hidden rounded-2xl surface shadow-lift">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-border px-4 py-3.5">
+              <div className="flex items-center gap-2.5">
+                <span className="grid h-8 w-8 place-items-center rounded-lg bg-accent">
+                  <Icon name="spark" size={15} className="text-accent-ink" />
+                </span>
+                <div className="flex flex-col leading-tight">
                   <span className="text-sm font-medium">Larkins</span>
-                  <span className="t-meta text-text-muted">
-                    {busy ? "думает…" : done ? "бриф собран" : "готов к диалогу"}
+                  <span className="t-meta text-[0.62rem] text-text-faint">
+                    {busy ? "печатает…" : done ? "бриф собран" : "на связи"}
                   </span>
                 </div>
               </div>
-              <div className="flex gap-1.5" aria-hidden="true">
-                <span className="h-2.5 w-2.5 rounded-full bg-bg-tertiary" />
-                <span className="h-2.5 w-2.5 rounded-full bg-bg-tertiary" />
-                <span className="h-2.5 w-2.5 rounded-full bg-accent/70" />
-              </div>
+              <span
+                className={cn(
+                  "h-2 w-2 rounded-full",
+                  busy ? "bg-accent-light" : done ? "bg-accent" : "bg-accent/60",
+                )}
+                aria-hidden="true"
+              />
             </div>
 
             {/* Progress steps */}
-            <div className="flex gap-1.5 px-5 py-3">
+            <div className="flex gap-1.5 border-b border-border px-4 py-3">
               {BRIEF_LABELS.map((label, i) => (
                 <div key={label} className="flex flex-1 flex-col gap-1.5">
                   <span
@@ -156,8 +159,8 @@ export function Larkins() {
                   />
                   <span
                     className={cn(
-                      "t-meta text-[0.6rem] transition-colors duration-500",
-                      i < answered ? "text-text-muted" : "text-text-muted/40",
+                      "t-meta text-[0.55rem] transition-colors duration-500",
+                      i < answered ? "text-text-muted" : "text-text-faint/60",
                     )}
                   >
                     {label}
@@ -169,7 +172,7 @@ export function Larkins() {
             {/* Message log */}
             <div
               ref={logRef}
-              className="flex h-[340px] flex-col gap-4 overflow-y-auto px-5 py-5"
+              className="flex h-[320px] flex-col gap-3 overflow-y-auto px-4 py-4"
               role="log"
               aria-live="polite"
             >
@@ -177,14 +180,14 @@ export function Larkins() {
                 {messages.map((m) => (
                   <motion.div
                     key={m.id}
-                    initial={{ opacity: 0, y: 12 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
                     className={cn(
-                      "max-w-[86%] whitespace-pre-line rounded-2xl px-4 py-3 text-sm leading-relaxed",
+                      "max-w-[88%] whitespace-pre-line rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
                       m.role === "user"
-                        ? "self-end bg-accent text-[#0b0b0c]"
-                        : "self-start border border-border bg-bg/60 text-text",
+                        ? "self-end bg-accent text-accent-ink"
+                        : "self-start border border-border bg-bg-tertiary text-text",
                     )}
                   >
                     {m.content}
@@ -193,21 +196,21 @@ export function Larkins() {
               </AnimatePresence>
 
               {busy && (
-                <div className="self-start rounded-2xl border border-border bg-bg/60 px-4 py-3">
+                <div className="self-start rounded-2xl border border-border bg-bg-tertiary px-3.5 py-3">
                   <TypingDots />
                 </div>
               )}
             </div>
 
             {/* Composer */}
-            <div className="border-t border-border p-4">
+            <div className="border-t border-border p-3">
               {done ? (
                 <button
                   type="button"
                   onClick={reset}
                   className="flex w-full items-center justify-center gap-2 rounded-xl
-                             border border-border bg-bg/60 py-3 text-sm text-text-muted
-                             cursor-pointer transition-colors hover:border-accent/50 hover:text-accent"
+                             border border-border py-3 text-sm text-text-muted cursor-pointer
+                             transition-colors hover:border-border-strong hover:text-accent"
                 >
                   <Icon name="spark" size={15} />
                   Начать новый бриф
@@ -236,21 +239,21 @@ export function Larkins() {
                     rows={1}
                     placeholder="Напишите ответ…"
                     disabled={busy}
-                    className="max-h-28 min-h-[48px] flex-1 resize-none rounded-xl border border-border
-                               bg-bg/60 px-4 py-3 text-sm text-text outline-none
-                               placeholder:text-text-muted/60 focus:border-accent/60
+                    className="max-h-28 min-h-[44px] flex-1 resize-none rounded-xl border border-border
+                               bg-bg px-3.5 py-3 text-sm text-text outline-none
+                               placeholder:text-text-faint focus:border-accent
                                disabled:opacity-60"
                   />
                   <button
                     type="submit"
                     disabled={busy || !input.trim()}
                     aria-label="Отправить сообщение"
-                    className="grid h-12 w-12 shrink-0 place-items-center rounded-xl
-                               bg-accent text-[#0b0b0c] cursor-pointer
+                    className="grid h-11 w-11 shrink-0 place-items-center rounded-xl
+                               bg-accent text-accent-ink cursor-pointer
                                transition-colors hover:bg-accent-light
                                disabled:cursor-not-allowed disabled:opacity-40"
                   >
-                    <Icon name="send" size={18} />
+                    <Icon name="send" size={17} />
                   </button>
                 </form>
               )}
@@ -262,29 +265,6 @@ export function Larkins() {
   );
 }
 
-/** Small breathing orb for the console header. */
-function ConsoleOrb({ active }: { active: boolean }) {
-  return (
-    <span className="relative grid h-9 w-9 place-items-center">
-      <span
-        className={cn(
-          "absolute inset-0 rounded-full blur-md",
-          active ? "anim-glow" : "opacity-50",
-        )}
-        style={{ background: "var(--accent-glow)" }}
-      />
-      <span
-        className="relative h-5 w-5 rounded-full anim-breathe"
-        style={{
-          background:
-            "radial-gradient(circle at 34% 30%, #fff3d6, var(--accent) 55%, #1c1608)",
-          boxShadow: "0 0 14px var(--accent-glow)",
-        }}
-      />
-    </span>
-  );
-}
-
 /** Three-dot typing indicator. */
 function TypingDots() {
   return (
@@ -293,7 +273,7 @@ function TypingDots() {
         <motion.span
           key={i}
           className="h-1.5 w-1.5 rounded-full bg-accent"
-          animate={{ opacity: [0.3, 1, 0.3], y: [0, -3, 0] }}
+          animate={{ opacity: [0.3, 1, 0.3] }}
           transition={{
             duration: 1.1,
             repeat: Infinity,

@@ -1,78 +1,10 @@
 /* ============================================================
-   Ambient keyframe animations.
-   Slow, intentional, atmospheric — never chaotic.
+   Motion primitives — restrained and editorial.
+   Reveal/stagger lives in Framer Motion; this file holds only
+   the few ambient CSS loops the site still uses.
    ============================================================ */
 
-/* Living AI core — slow breath */
-@keyframes breathe {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.92;
-  }
-  50% {
-    transform: scale(1.045);
-    opacity: 1;
-  }
-}
-
-/* Procedural glow pulse */
-@keyframes glow-pulse {
-  0%,
-  100% {
-    opacity: 0.35;
-    transform: scale(0.96);
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(1.06);
-  }
-}
-
-/* Neural pulse rings expanding outward */
-@keyframes pulse-ring {
-  0% {
-    transform: scale(0.6);
-    opacity: 0.55;
-  }
-  80% {
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1.9);
-    opacity: 0;
-  }
-}
-
-/* Ambient float — gentle vertical drift */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-14px);
-  }
-}
-
-/* Infrastructure line — slow travelling shimmer */
-@keyframes line-travel {
-  0% {
-    background-position: -120% 0;
-  }
-  100% {
-    background-position: 220% 0;
-  }
-}
-
-/* Slow conic rotation for orb internals */
-@keyframes spin-slow {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Caret blink for the Larkins console */
+/* Caret blink for the Larkins console placeholder state */
 @keyframes caret {
   0%,
   100% {
@@ -83,26 +15,23 @@
   }
 }
 
-/* Utility bindings */
-.anim-breathe {
-  animation: breathe 7s var(--ease-cinematic) infinite;
-}
-.anim-glow {
-  animation: glow-pulse 6s ease-in-out infinite;
-}
-.anim-float {
-  animation: float 9s ease-in-out infinite;
-}
-.anim-spin-slow {
-  animation: spin-slow 36s linear infinite;
+/* Marquee for the capability strip */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
-/* Honor reduced-motion: stop ambient loops, keep content visible */
+.anim-marquee {
+  animation: marquee 38s linear infinite;
+}
+
+/* Honor reduced-motion: stop loops, collapse transitions */
 @media (prefers-reduced-motion: reduce) {
-  .anim-breathe,
-  .anim-glow,
-  .anim-float,
-  .anim-spin-slow {
+  .anim-marquee {
     animation: none !important;
   }
   *,

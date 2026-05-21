@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { revealVariants, revealViewport, staggerContainer } from "@/hooks/useReveal";
-import { Glow } from "@/components/ui/Glow";
 import { Icon } from "@/components/ui/Icon";
+import { revealVariants, revealViewport, staggerContainer } from "@/hooks/useReveal";
+import { contact } from "@/data/contacts";
 
 const footerNav = [
   {
-    title: "Навигация",
+    title: "Агентство",
     links: [
       { label: "Кто мы", href: "/#about" },
       { label: "Услуги", href: "/#services" },
@@ -17,78 +17,75 @@ const footerNav = [
     ],
   },
   {
-    title: "Команда",
+    title: "Ещё",
     links: [
-      { label: "О команде", href: "/#team" },
+      { label: "Команда", href: "/#team" },
       { label: "Larkins AI", href: "/larkins" },
       { label: "Для фрилансеров", href: "/#freelancers" },
-      { label: "Обсудить проект", href: "/#contact" },
+      { label: "Вопросы", href: "/#faq" },
     ],
   },
 ];
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden border-t border-border bg-bg-secondary/40">
-      <Glow className="-bottom-40 left-1/2 -translate-x-1/2" size={620} />
-      <div className="grid-field mask-radial absolute inset-0 opacity-60" aria-hidden="true" />
-
-      <div className="shell relative py-20">
+    <footer className="relative border-t border-border bg-bg-secondary">
+      <div className="shell py-14 sm:py-16">
         {/* Slogan band */}
         <motion.div
-          variants={staggerContainer(0.12)}
+          variants={staggerContainer(0.1)}
           initial="hidden"
           whileInView="visible"
           viewport={revealViewport}
-          className="flex flex-col items-start gap-6 border-b border-border pb-16"
+          className="flex flex-col items-start gap-5 border-b border-border pb-12"
         >
-          <motion.span
-            variants={revealVariants("up")}
-            className="t-meta text-text-muted"
-          >
-            Lark Freelance
-          </motion.span>
           <motion.h2
             variants={revealVariants("up")}
             className="font-display text-balance"
-            style={{ fontSize: "clamp(2.4rem, 6vw, 4.6rem)" }}
+            style={{ fontSize: "clamp(2rem, 5vw, 3.6rem)" }}
           >
             Расправь <em>свои крылья</em>
           </motion.h2>
-          <motion.div variants={revealVariants("up")}>
-            <Link
-              href="/#contact"
-              className="group inline-flex items-center gap-3 rounded-full border border-border
-                         bg-bg px-6 py-3.5 text-sm cursor-pointer
-                         transition-colors duration-300 hover:border-accent/60 hover:text-accent"
-            >
-              Начать диалог с командой
-              <Icon
-                name="arrow-right"
-                size={16}
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </Link>
-          </motion.div>
+          <motion.a
+            variants={revealVariants("up")}
+            href={contact.telegram.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-2.5 rounded-full bg-accent
+                       px-6 py-3.5 text-sm font-medium text-accent-ink cursor-pointer
+                       transition-colors duration-300 hover:bg-accent-light"
+          >
+            <Icon name="telegram" size={17} />
+            Написать в Telegram
+            <Icon
+              name="arrow-right"
+              size={15}
+              className="transition-transform duration-300 group-hover:translate-x-0.5"
+            />
+          </motion.a>
         </motion.div>
 
-        {/* Link columns */}
-        <div className="grid gap-12 py-14 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="flex flex-col gap-4">
+        {/* Columns */}
+        <div className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Brand */}
+          <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
-              <Icon name="wing" size={22} className="text-accent" />
-              <span className="font-display text-lg">Lark Freelance</span>
+              <span className="grid h-7 w-7 place-items-center rounded-md bg-accent">
+                <Icon name="wing" size={15} className="text-accent-ink" />
+              </span>
+              <span className="font-display text-base">Lark Freelance</span>
             </div>
-            <p className="t-body text-sm text-text-muted">
+            <p className="text-sm leading-relaxed text-text-muted">
               AI-native execution unit. Стратегия, дизайн и разработка
-              в одной команде нового поколения.
+              в одном контуре.
             </p>
           </div>
 
+          {/* Nav columns */}
           {footerNav.map((col) => (
-            <nav key={col.title} aria-label={col.title} className="flex flex-col gap-4">
-              <span className="t-meta text-text-muted">{col.title}</span>
-              <ul className="flex flex-col gap-2.5">
+            <nav key={col.title} aria-label={col.title} className="flex flex-col gap-3">
+              <span className="t-meta text-text-faint">{col.title}</span>
+              <ul className="flex flex-col gap-2">
                 {col.links.map((link) => (
                   <li key={link.href}>
                     <Link
@@ -104,28 +101,46 @@ export function Footer() {
             </nav>
           ))}
 
-          <div className="flex flex-col gap-4">
-            <span className="t-meta text-text-muted">Контакт</span>
+          {/* Contact */}
+          <div className="flex flex-col gap-3">
+            <span className="t-meta text-text-faint">Контакт</span>
             <a
-              href="mailto:hello@larkfreelance.dev"
-              className="t-mono text-sm text-text transition-colors hover:text-accent cursor-pointer"
+              href={contact.telegram.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm text-text-muted
+                         transition-colors hover:text-accent cursor-pointer"
             >
-              hello@larkfreelance.dev
+              <Icon name="telegram" size={15} />
+              {contact.telegram.handle}
             </a>
-            <span className="text-sm text-text-muted">
-              Крым · работаем удалённо
-            </span>
+            <a
+              href={contact.phone.href}
+              className="flex items-center gap-2 text-sm text-text-muted
+                         transition-colors hover:text-accent cursor-pointer"
+            >
+              <Icon name="phone" size={15} />
+              {contact.phone.label}
+            </a>
+            <a
+              href={contact.email.href}
+              className="flex items-center gap-2 text-sm text-text-muted
+                         transition-colors hover:text-accent cursor-pointer"
+            >
+              <Icon name="mail" size={15} />
+              {contact.email.label}
+            </a>
+            <span className="text-sm text-text-faint">{contact.location}</span>
           </div>
         </div>
 
         {/* Baseline */}
-        <div className="flex flex-col gap-3 border-t border-border pt-8 text-xs text-text-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-2 border-t border-border pt-7 text-xs
+                        text-text-faint sm:flex-row sm:items-center sm:justify-between">
           <span className="t-mono">
-            © {new Date().getFullYear()} Lark Freelance. Все права защищены.
+            © {new Date().getFullYear()} Lark Freelance
           </span>
-          <span className="t-mono">
-            Designed &amp; engineered as a private tech unit.
-          </span>
+          <span className="t-mono">Private tech unit · Крым</span>
         </div>
       </div>
     </footer>

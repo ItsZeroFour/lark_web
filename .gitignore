@@ -3,6 +3,9 @@
 /.pnp
 .pnp.js
 
+/.claude
+prompt.md
+
 # next.js
 /.next/
 /out/

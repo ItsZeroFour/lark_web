@@ -26,19 +26,20 @@ export function Portfolio() {
   );
 
   return (
-    <Section id="portfolio">
-      <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+    <Section id="portfolio" divided>
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <SectionHeading
           eyebrow="04 — Портфолио"
           title="Работы, которые <em>ушли в прод</em>"
-          description="Подборка проектов разных направлений — от веб-платформ до автономных AI-агентов."
+          description="Проекты разных направлений — от веб-платформ до автономных AI-агентов."
         />
 
         {/* Filters */}
         <div
           role="tablist"
           aria-label="Фильтр работ"
-          className="flex flex-wrap gap-2"
+          className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1
+                     [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {portfolioFilters.map((f) => {
             const isActive = active === f.id;
@@ -49,11 +50,11 @@ export function Portfolio() {
                 aria-selected={isActive}
                 onClick={() => setActive(f.id)}
                 className={cn(
-                  "rounded-full border px-4 py-2 text-sm cursor-pointer",
+                  "shrink-0 rounded-full border px-3.5 py-2 text-sm cursor-pointer",
                   "transition-colors duration-200",
                   isActive
-                    ? "border-accent bg-accent text-[#0b0b0c]"
-                    : "border-border text-text-muted hover:border-accent/50 hover:text-text",
+                    ? "border-accent bg-accent text-accent-ink"
+                    : "border-border text-text-muted hover:border-border-strong hover:text-text",
                 )}
               >
                 {f.label}
@@ -63,68 +64,53 @@ export function Portfolio() {
         </div>
       </div>
 
-      <motion.div layout className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <motion.div
+        layout
+        className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      >
         <AnimatePresence mode="popLayout">
           {items.map((item) => (
             <motion.article
               key={item.id}
               layout
-              initial={{ opacity: 0, scale: 0.94 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.94 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="group relative cursor-pointer overflow-hidden rounded-2xl
-                         border border-border bg-bg-secondary/40
-                         transition-colors duration-300 hover:border-accent/45"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl
+                         surface transition-colors duration-300 hover:border-border-strong"
             >
-              {/* Cinematic cover */}
+              {/* Cover */}
               <div
-                className="relative aspect-[4/3] overflow-hidden"
+                className="relative flex aspect-[16/10] flex-col justify-between p-5"
                 style={{
-                  background: `linear-gradient(140deg, ${item.cover[0]}, ${item.cover[1]})`,
+                  background: `linear-gradient(150deg, ${item.cover[0]}, ${item.cover[1]})`,
                 }}
               >
-                <div className="grid-field absolute inset-0 opacity-50" />
-                <div
-                  className="absolute inset-0 opacity-0 transition-opacity duration-500
-                             group-hover:opacity-100"
-                  style={{
-                    background:
-                      "radial-gradient(circle at 70% 30%, var(--accent-glow), transparent 65%)",
-                  }}
-                />
-                {/* Year + glyph */}
-                <span className="absolute left-5 top-5 t-mono text-xs text-text-muted">
-                  {item.year}
-                </span>
-                <span
-                  className="absolute right-5 top-5 grid h-9 w-9 place-items-center
-                             rounded-lg border border-border bg-bg/60 text-text-muted
-                             transition-colors duration-300 group-hover:text-accent"
-                >
-                  <Icon name="arrow-up-right" size={16} />
-                </span>
-                {/* Title overlay sliding in on hover */}
-                <div className="absolute inset-x-0 bottom-0 p-5">
+                <div className="flex items-center justify-between">
                   <span className="t-meta text-accent">{item.categoryLabel}</span>
+                  <span className="t-mono text-xs text-text-faint">{item.year}</span>
                 </div>
+                <span className="font-display text-4xl text-text/15 transition-colors
+                                 duration-300 group-hover:text-text/25">
+                  {item.title}
+                </span>
               </div>
 
               {/* Body */}
-              <div className="flex flex-col gap-2 p-6">
-                <h3 className="t-card font-display">{item.title}</h3>
+              <div className="flex flex-1 flex-col gap-2 p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="t-card font-display">{item.title}</h3>
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg
+                                   border border-border text-text-faint transition-colors
+                                   duration-300 group-hover:border-accent group-hover:text-accent">
+                    <Icon name="arrow-up-right" size={15} />
+                  </span>
+                </div>
                 <p className="text-sm leading-relaxed text-text-muted">
                   {item.summary}
                 </p>
               </div>
-
-              {/* Hover reveal line */}
-              <span
-                className="absolute inset-x-0 bottom-0 h-px scale-x-0 bg-accent
-                           transition-transform duration-500 ease-cinematic
-                           group-hover:scale-x-100"
-                aria-hidden="true"
-              />
             </motion.article>
           ))}
         </AnimatePresence>

@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Geologica, JetBrains_Mono } from "next/font/google";
 import { NoiseOverlay } from "@/components/ui/NoiseOverlay";
+import { contact } from "@/data/contacts";
 import "./globals.css";
 
 /**
  * Typography.
- * Headings — Playfair Display: a high-contrast cinematic serif with true
+ * Headings — Playfair Display: a high-contrast editorial serif with true
  * italic accents and full Cyrillic coverage (the brief's DM Serif Display
  * has no Cyrillic glyphs, and this site speaks Russian).
  * Body/UI — Geologica. Meta/code — JetBrains Mono.
@@ -32,40 +33,97 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
+const SITE_URL = "https://larkfreelance.dev";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://larkfreelance.dev"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Lark Freelance — AI-native execution unit",
+    default: "Lark Freelance — IT-агентство нового поколения",
     template: "%s · Lark Freelance",
   },
   description:
-    "Lark Freelance — технологическая команда нового поколения. Стратегия, дизайн и AI-execution в одном контуре. Цифровые решения, которые работают.",
+    "Lark Freelance — технологическая команда нового поколения. Веб-разработка, AI-автоматизация и IT под ключ в одном контуре. Стратегия, дизайн и execution. Ответ в течение часа.",
   keywords: [
     "Lark Freelance",
-    "digital agency",
-    "AI automation",
+    "IT-агентство",
     "веб-разработка",
+    "разработка сайтов",
+    "AI автоматизация",
     "IT под ключ",
+    "digital агентство",
+    "разработка под ключ",
+    "Крым",
   ],
   authors: [{ name: "Lark Freelance" }],
+  creator: "Lark Freelance",
+  applicationName: "Lark Freelance",
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Lark Freelance — AI-native execution unit",
-    description:
-      "Стратегия, дизайн и AI-execution в одной команде. Для бизнеса, который думает вперёд.",
     type: "website",
     locale: "ru_RU",
+    url: SITE_URL,
+    siteName: "Lark Freelance",
+    title: "Lark Freelance — IT-агентство нового поколения",
+    description:
+      "Веб-разработка, AI-автоматизация и IT под ключ в одной команде. Цифровые решения, которые работают.",
   },
-  robots: { index: true, follow: true },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lark Freelance — IT-агентство нового поколения",
+    description:
+      "Веб-разработка, AI-автоматизация и IT под ключ в одной команде.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
+  category: "technology",
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0b0b0c",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0b" },
+    { media: "(prefers-color-scheme: light)", color: "#f6f3ec" },
+  ],
 };
 
 /** Sets the theme before first paint to avoid a flash of the wrong theme. */
 const themeScript = `(function(){try{var t=localStorage.getItem('lark-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();`;
+
+/** Organization / ProfessionalService structured data for SEO. */
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: "Lark Freelance",
+  description:
+    "IT-агентство нового поколения: веб-разработка, AI-автоматизация и IT под ключ.",
+  url: SITE_URL,
+  email: contact.email.label,
+  telephone: contact.phone.label,
+  areaServed: "RU",
+  address: {
+    "@type": "PostalAddress",
+    addressRegion: "Республика Крым",
+    addressCountry: "RU",
+  },
+  sameAs: [contact.telegram.url],
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "sales",
+    telephone: contact.phone.label,
+    email: contact.email.label,
+    availableLanguage: ["Russian"],
+  },
+  knowsAbout: [
+    "Веб-разработка",
+    "AI-автоматизация",
+    "IT под ключ",
+    "Продуктовая стратегия",
+  ],
+};
 
 export default function RootLayout({
   children,
@@ -81,10 +139,14 @@ export default function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body>
         {children}
-        <NoiseOverlay opacity={0.04} />
+        <NoiseOverlay opacity={0.025} />
       </body>
     </html>
   );

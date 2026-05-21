@@ -1,164 +1,134 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
-import { AmbientMotion } from "@/components/animations/AmbientMotion";
+import { motion } from "framer-motion";
+import { Glow } from "@/components/ui/Glow";
 import { Icon } from "@/components/ui/Icon";
 import { revealVariants, staggerContainer } from "@/hooks/useReveal";
+import { contact } from "@/data/contacts";
 
-/**
- * /larkins — a full-screen cinematic experience.
- * Almost-black canvas, a sleeping AI orb, ambient motion, "coming soon".
- */
+const traits = [
+  {
+    title: "Собирает бриф",
+    body: "Пять точных вопросов вместо длинной формы — задача оформляется сама.",
+  },
+  {
+    title: "Думает с командой",
+    body: "Интеллектуальный слой внутри процессов агентства, а не отдельный чат-бот.",
+  },
+  {
+    title: "Передаёт задачу",
+    body: "Готовое саммари сразу уходит команде — ответ в течение часа.",
+  },
+];
+
 export function LarkinsStage() {
-  const reduce = useReducedMotion();
-
   return (
-    <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden px-6 py-32">
-      {/* Deepened canvas */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 50% 42%, var(--halo) 0%, transparent 62%)",
-        }}
-      />
-      <div className="grid-field mask-radial absolute inset-0 opacity-50" aria-hidden="true" />
-      <AmbientMotion count={22} />
+    <section className="relative flex min-h-[100svh] items-center overflow-hidden py-32">
+      <Glow className="left-1/2 top-24 -translate-x-1/2" size={620} />
 
-      <motion.div
-        variants={staggerContainer(0.16, 0.1)}
-        initial="hidden"
-        animate="visible"
-        className="relative flex flex-col items-center gap-9 text-center"
-      >
-        {/* Sleeping orb */}
-        <motion.div variants={revealVariants("fade")}>
-          <SleepingOrb />
-        </motion.div>
-
-        <motion.span
-          variants={revealVariants("up")}
-          className="t-meta text-text-muted"
-        >
-          Lark Freelance · intelligence layer
-        </motion.span>
-
-        <motion.h1
-          variants={revealVariants("up")}
-          className="font-display leading-none tracking-tight"
-          style={{ fontSize: "clamp(3.4rem, 13vw, 9rem)" }}
-        >
-          LARKINS
-        </motion.h1>
-
+      <div className="shell relative">
         <motion.div
-          variants={revealVariants("up")}
-          className="flex items-center gap-3 t-meta text-accent"
+          variants={staggerContainer(0.1, 0.05)}
+          initial="hidden"
+          animate="visible"
+          className="flex flex-col items-center text-center"
         >
-          <span className="inline-block h-px w-10 bg-accent" />
-          coming soon
-          <span className="inline-block h-px w-10 bg-accent" />
-        </motion.div>
-
-        <motion.p
-          variants={revealVariants("up")}
-          className="t-lead max-w-[34ch] text-text-muted"
-        >
-          AI-ассистент нового поколения для вашего бизнеса.
-          Спокойный интеллект, встроенный в работу команды.
-        </motion.p>
-
-        <motion.div variants={revealVariants("up")}>
-          <Link
-            href="/#contact"
-            className="group inline-flex items-center gap-2.5 rounded-full border border-border
-                       bg-bg-secondary/50 px-6 py-3.5 text-sm cursor-pointer
-                       transition-colors duration-300 hover:border-accent/60 hover:text-accent"
+          <motion.span
+            variants={revealVariants("up")}
+            className="inline-flex items-center gap-2 rounded-full border border-accent/40
+                       bg-accent-soft px-3.5 py-1.5 t-meta text-accent"
           >
-            <Icon name="arrow-right" size={16} className="rotate-180" />
-            Вернуться и собрать бриф
-          </Link>
-        </motion.div>
-      </motion.div>
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            coming soon
+          </motion.span>
 
-      {/* Status line pinned to the base */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 t-meta text-text-muted/70">
-        <motion.span
-          className="h-1.5 w-1.5 rounded-full bg-accent"
-          animate={reduce ? undefined : { opacity: [0.2, 0.8, 0.2] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        />
-        status: dormant — calibrating
+          <motion.h1
+            variants={revealVariants("up")}
+            className="font-display mt-6 leading-none tracking-tight"
+            style={{ fontSize: "clamp(3rem, 14vw, 8.5rem)" }}
+          >
+            Larkins
+          </motion.h1>
+
+          <motion.p
+            variants={revealVariants("up")}
+            className="t-meta mt-4 text-text-faint"
+          >
+            Lark Freelance · intelligence layer
+          </motion.p>
+
+          <motion.p
+            variants={revealVariants("up")}
+            className="t-lead text-pretty mt-7 text-text-muted"
+          >
+            AI-ассистент нового поколения для вашего бизнеса. Спокойный
+            интеллект, встроенный в работу команды.
+          </motion.p>
+
+          {/* Traits */}
+          <motion.ul
+            variants={staggerContainer(0.08)}
+            className="mt-12 grid w-full gap-3 text-left sm:grid-cols-3"
+          >
+            {traits.map((t) => (
+              <motion.li
+                key={t.title}
+                variants={revealVariants("up")}
+                className="rounded-2xl surface p-5"
+              >
+                <h2 className="font-display text-base">{t.title}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-text-muted">
+                  {t.body}
+                </p>
+              </motion.li>
+            ))}
+          </motion.ul>
+
+          {/* Actions */}
+          <motion.div
+            variants={revealVariants("up")}
+            className="mt-11 flex w-full flex-col gap-3 xs:w-auto xs:flex-row"
+          >
+            <Link
+              href="/#larkins-brief"
+              className="group inline-flex items-center justify-center gap-2 rounded-full
+                         bg-accent px-7 py-3.5 text-sm font-medium text-accent-ink
+                         cursor-pointer transition-colors duration-300 hover:bg-accent-light"
+            >
+              Собрать бриф сейчас
+              <Icon
+                name="arrow-right"
+                size={16}
+                className="transition-transform duration-300 group-hover:translate-x-0.5"
+              />
+            </Link>
+            <a
+              href={contact.telegram.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-full
+                         border border-border-strong px-7 py-3.5 text-sm font-medium
+                         cursor-pointer transition-colors duration-300
+                         hover:border-accent hover:text-accent"
+            >
+              <Icon name="telegram" size={16} />
+              Написать в Telegram
+            </a>
+          </motion.div>
+
+          <motion.div variants={revealVariants("up")} className="mt-8">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-sm text-text-faint
+                         transition-colors hover:text-text cursor-pointer"
+            >
+              <Icon name="arrow-right" size={15} className="rotate-180" />
+              На главную
+            </Link>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
-  );
-}
-
-/** A dimmer, slower orb — the intelligence at rest. */
-function SleepingOrb() {
-  const reduce = useReducedMotion();
-
-  return (
-    <div className="relative grid h-56 w-56 place-items-center sm:h-72 sm:w-72">
-      {/* Faint pulse rings */}
-      {!reduce &&
-        [0, 1].map((i) => (
-          <span
-            key={i}
-            aria-hidden="true"
-            className="absolute h-[55%] w-[55%] rounded-full border border-accent/20"
-            style={{
-              animation: `pulse-ring 9s ${i * 4.5}s var(--ease-cinematic) infinite`,
-            }}
-          />
-        ))}
-
-      {/* Dim halo */}
-      <div
-        aria-hidden="true"
-        className="absolute h-[80%] w-[80%] rounded-full blur-[55px] anim-glow"
-        style={{
-          background:
-            "radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)",
-          opacity: 0.6,
-        }}
-      />
-
-      {/* Core — darker, slow breath */}
-      <motion.div
-        className="relative h-[58%] w-[58%] rounded-full"
-        animate={reduce ? undefined : { scale: [1, 1.04, 1], opacity: [0.78, 0.95, 0.78] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div
-          className="absolute inset-0 rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle at 36% 32%, #5a4514 0%, var(--accent) 36%, #3a2c0c 62%, #120e06 100%)",
-            boxShadow:
-              "0 0 70px var(--accent-glow), inset -18px -22px 50px rgba(0,0,0,0.85), inset 10px 12px 30px rgba(255,224,150,0.25)",
-          }}
-        />
-        {/* Slow conic drift */}
-        <div
-          className="absolute inset-0 overflow-hidden rounded-full opacity-40 mix-blend-screen anim-spin-slow"
-          style={{
-            background:
-              "conic-gradient(from 0deg, transparent, rgba(255,224,150,0.4) 90deg, transparent 200deg)",
-          }}
-        />
-        {/* Resting core glow */}
-        {!reduce && (
-          <motion.div
-            className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-light"
-            animate={{ opacity: [0.3, 0.7, 0.3] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            style={{ boxShadow: "0 0 18px var(--accent)" }}
-          />
-        )}
-      </motion.div>
-    </div>
   );
 }
