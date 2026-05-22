@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Geologica, JetBrains_Mono } from "next/font/google";
 import { NoiseOverlay } from "@/components/ui/NoiseOverlay";
 import { contact } from "@/data/contacts";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 /**
@@ -32,8 +33,6 @@ const mono = JetBrains_Mono({
   variable: "--font-mono",
   display: "swap",
 });
-
-const SITE_URL = "https://larkfreelance.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

@@ -34,12 +34,11 @@ export function Portfolio() {
           description="Проекты разных направлений — от веб-платформ до автономных AI-агентов."
         />
 
-        {/* Filters */}
+        {/* Filters — wrap instead of horizontal scroll so nothing is clipped */}
         <div
           role="tablist"
           aria-label="Фильтр работ"
-          className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1
-                     [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex flex-wrap gap-1.5 lg:justify-end"
         >
           {portfolioFilters.map((f) => {
             const isActive = active === f.id;

@@ -6,6 +6,8 @@ export interface Service {
   title: string;
   summary: string;
   capabilities: string[];
+  /** Display price — "от …" for project work, "По подписке" for Larkins. */
+  price: string;
   /** Larkins gets a distinct, almost-released treatment. */
   featured?: boolean;
   status?: string;
@@ -23,6 +25,7 @@ export const services: Service[] = [
       "Дизайн-системы и фронтенд",
       "Высоконагруженные интеграции",
     ],
+    price: "от 80 000 ₽",
   },
   {
     id: "ai",
@@ -35,6 +38,7 @@ export const services: Service[] = [
       "Автоматизация операций",
       "Внутренние интеллект-инструменты",
     ],
+    price: "от 70 000 ₽",
   },
   {
     id: "turnkey",
@@ -47,6 +51,7 @@ export const services: Service[] = [
       "Запуск и поддержка",
       "Технологический консалтинг",
     ],
+    price: "от 200 000 ₽",
   },
   {
     id: "larkins",
@@ -59,6 +64,7 @@ export const services: Service[] = [
       "Интеллектуальная поддержка проектов",
       "Адаптивный AI-интерфейс",
     ],
+    price: "По подписке",
     featured: true,
     status: "coming soon",
   },

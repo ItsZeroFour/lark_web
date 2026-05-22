@@ -3,6 +3,8 @@
 /.pnp
 .pnp.js
 
+/screenshots
+
 /.claude
 prompt.md
 

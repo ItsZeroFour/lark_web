@@ -5,7 +5,22 @@
       "PowerShell(npm install *)",
       "PowerShell(npm run *)",
       "PowerShell(Stop-Process *)",
-      "PowerShell(Get-Process *)"
+      "PowerShell(Get-Process *)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(python \"C:/Users/lanin/.claude/skills/ui-ux-pro-max/scripts/search.py\" \"agency portfolio editorial dark minimal premium\" --design-system -f markdown)",
+      "Bash(npx next *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "PowerShell(Test-Path *)",
+      "PowerShell(New-Item *)",
+      "PowerShell(Out-Null *)",
+      "Bash(mkdir -p /c/Users/lanin/AppData/Local/Temp/lark_shot_tool)",
+      "Read(//c/Users/lanin/AppData/Local/Temp/**)",
+      "Bash(npm init *)",
+      "Bash(npm i *)",
+      "Bash(node shot.js)",
+      "Bash(node *)",
+      "PowerShell(Get-NetTCPConnection *)"
     ]
   }
 }

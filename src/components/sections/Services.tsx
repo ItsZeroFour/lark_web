@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Card } from "@/components/ui/Card";
+import { Glow } from "@/components/ui/Glow";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { revealViewport, staggerContainer } from "@/hooks/useReveal";
 import { services } from "@/data/services";
@@ -19,6 +20,9 @@ const icons: Record<string, IconName> = {
 export function Services() {
   return (
     <Section id="services" divided>
+      {/* Quiet ambient warmth — one soft glow, never distracting */}
+      <Glow className="-top-20 right-0 opacity-60" size={520} />
+
       <SectionHeading
         eyebrow="02 — Услуги"
         title="Четыре направления, <em>одна</em> команда"
@@ -30,18 +34,39 @@ export function Services() {
         initial="hidden"
         whileInView="visible"
         viewport={revealViewport}
-        className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        className="mt-10 grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4"
       >
         {services.map((service) => {
           const inner = (
             <Card
               interactive={!service.featured}
               featured={service.featured}
-              className="flex h-full flex-col gap-4"
+              className="group/card flex h-full flex-col gap-4"
             >
-              <div className="flex items-start justify-between">
+              {/* Decorative watermark index — sits far behind content */}
+              <span
+                aria-hidden="true"
+                style={{ color: "rgba(243, 239, 232, 0.04)" }}
+                className="pointer-events-none absolute -bottom-6 -right-3 select-none
+                           font-display text-[6rem] leading-none"
+              >
+                {service.index}
+              </span>
+
+              {/* Hover accent line along the top edge */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 h-px
+                           bg-gradient-to-r from-transparent via-accent to-transparent
+                           opacity-0 transition-opacity duration-300
+                           group-hover/card:opacity-70"
+              />
+
+              <div className="relative flex items-start justify-between">
                 <span className="grid h-11 w-11 place-items-center rounded-xl
-                                 border border-border bg-bg text-accent">
+                                 border border-border bg-bg text-accent
+                                 transition-colors duration-300
+                                 group-hover/card:border-accent/40">
                   <Icon name={icons[service.id]} size={20} />
                 </span>
                 <span className="t-mono text-sm text-text-faint">
@@ -49,7 +74,9 @@ export function Services() {
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2">
+              {/* Title + status — fixed height keeps every card body aligned */}
+              <div className="relative flex min-h-[3.25rem] flex-wrap content-start
+                              items-center gap-2">
                 <h3 className="t-card font-display">{service.title}</h3>
                 {service.status && (
                   <span className="t-meta inline-flex items-center gap-1.5
@@ -61,11 +88,13 @@ export function Services() {
                 )}
               </div>
 
-              <p className="text-sm leading-relaxed text-text-muted">
+              {/* Summary — fixed height so the divider lands on one line */}
+              <p className="relative min-h-[7.25rem] text-sm leading-relaxed text-text-muted">
                 {service.summary}
               </p>
 
-              <ul className="mt-auto flex flex-col gap-1.5 border-t border-border pt-4">
+              {/* Capabilities */}
+              <ul className="relative flex flex-col gap-1.5 border-t border-border pt-4">
                 {service.capabilities.map((cap) => (
                   <li
                     key={cap}
@@ -77,26 +106,40 @@ export function Services() {
                 ))}
               </ul>
 
-              {service.featured && (
+              {/* Footer — identical on every card, pinned to the bottom edge */}
+              <div className="relative mt-auto flex flex-col gap-3.5 border-t border-border pt-4">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="t-meta text-text-faint">Стоимость</span>
+                  <span className="font-display text-base text-accent">
+                    {service.price}
+                  </span>
+                </div>
                 <span className="flex items-center gap-1.5 text-sm font-medium text-accent">
-                  Открыть Larkins
-                  <Icon name="arrow-right" size={14} />
+                  {service.featured ? "Открыть Larkins" : "Обсудить задачу"}
+                  <Icon
+                    name="arrow-right"
+                    size={14}
+                    className="transition-transform duration-300
+                               group-hover/card:translate-x-0.5"
+                  />
                 </span>
-              )}
+              </div>
             </Card>
           );
 
-          return service.featured ? (
+          return (
             <Link
               key={service.id}
-              href="/larkins"
+              href={service.featured ? "/larkins" : "/#contact"}
               className="block cursor-pointer"
-              aria-label="Larkins AI — открыть страницу"
+              aria-label={
+                service.featured
+                  ? "Larkins AI — открыть страницу"
+                  : `${service.title} — обсудить задачу`
+              }
             >
               {inner}
             </Link>
-          ) : (
-            <div key={service.id}>{inner}</div>
           );
         })}
       </motion.div>
