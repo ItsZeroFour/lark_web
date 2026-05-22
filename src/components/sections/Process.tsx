@@ -5,6 +5,7 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Spotlight } from "@/components/ui/Spotlight";
+import { Icon } from "@/components/ui/Icon";
 import { revealVariants, revealViewport, staggerContainer } from "@/hooks/useReveal";
 import { processStages } from "@/data/process";
 
@@ -58,8 +59,11 @@ export function Process() {
             {/* Node */}
             <span
               className="absolute left-[7px] top-1.5 grid h-[18px] w-[18px] place-items-center
-                         rounded-full border border-accent bg-bg
-                         shadow-[0_0_12px_2px_rgba(212,160,23,0.25)]"
+                         rounded-full border border-accent bg-bg"
+              style={{
+                boxShadow:
+                  "0 0 12px 2px color-mix(in srgb, var(--accent) 28%, transparent)",
+              }}
               aria-hidden="true"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
@@ -70,8 +74,26 @@ export function Process() {
                             ease-cinematic hover:-translate-y-1 hover:border-border-strong
                             hover:shadow-lift">
               <Spotlight />
+
+              {/* Stage glyph — large, faint, fills the open right side */}
+              <Icon
+                name={stage.icon}
+                size={132}
+                className="pointer-events-none absolute -right-3 top-1/2 z-0 hidden
+                           -translate-y-1/2 text-accent opacity-[0.07] transition-opacity
+                           duration-300 group-hover:opacity-[0.13] sm:block"
+              />
+
               <div className="relative z-[1] p-5 sm:p-6">
-                <div className="mb-2 flex items-baseline gap-3">
+                <div className="mb-2 flex items-center gap-3">
+                  {/* Stage icon plate */}
+                  <span
+                    className="grid h-10 w-10 shrink-0 place-items-center rounded-xl
+                               border border-border bg-bg text-accent transition-colors
+                               duration-300 group-hover:border-accent/40"
+                  >
+                    <Icon name={stage.icon} size={18} />
+                  </span>
                   <span className="font-display text-3xl text-accent">
                     {stage.index}
                   </span>

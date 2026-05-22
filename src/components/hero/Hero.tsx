@@ -99,18 +99,18 @@ export function Hero() {
           {/* Stats */}
           <motion.dl
             variants={revealVariants("up")}
-            className="mt-12 grid w-full max-w-md grid-cols-3 gap-px overflow-hidden
-                       rounded-2xl border border-border bg-border"
+            className="mt-12 flex w-full max-w-md overflow-hidden rounded-2xl surface"
           >
-            {stats.map((s) => (
+            {stats.map((s, i) => (
               <div
                 key={s.label}
-                className="flex flex-col items-center gap-1 bg-bg px-3 py-5"
+                className={`flex flex-1 flex-col items-center gap-1.5 px-3 py-5
+                            ${i > 0 ? "border-l border-border" : ""}`}
               >
-                <dt className="font-display text-xl amber xs:text-2xl sm:text-3xl">
+                <dt className="font-display text-2xl amber tabular-nums sm:text-3xl">
                   {s.value}
                 </dt>
-                <dd className="text-center text-[0.68rem] leading-tight text-text-muted">
+                <dd className="text-center text-[0.66rem] leading-tight text-text-muted">
                   {s.label}
                 </dd>
               </div>

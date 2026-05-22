@@ -26,6 +26,9 @@ export function SectionHeading({
   align = "left",
   className,
 }: SectionHeadingProps) {
+  // Leading digits of the eyebrow ("02 — Услуги" → "02") drive the folio number.
+  const folio = eyebrow?.match(/\d+/)?.[0];
+
   return (
     <motion.div
       variants={staggerContainer(0.1)}
@@ -33,11 +36,25 @@ export function SectionHeading({
       whileInView="visible"
       viewport={revealViewport}
       className={cn(
-        "flex flex-col gap-4",
+        "relative flex flex-col gap-4",
         align === "center" && "items-center text-center",
         className,
       )}
     >
+      {/* Architectural folio number — large, faint, behind the heading */}
+      {folio && align === "left" && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-10 right-0 -z-10 select-none
+                     font-display leading-[0.8]"
+          style={{
+            fontSize: "clamp(4.5rem, 11vw, 8.5rem)",
+            color: "color-mix(in srgb, var(--text) 5%, transparent)",
+          }}
+        >
+          {folio}
+        </span>
+      )}
       {eyebrow && (
         <motion.span
           variants={revealVariants("up")}

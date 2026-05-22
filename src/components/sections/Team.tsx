@@ -118,12 +118,12 @@ export function Team() {
                 {/* Monogram badge */}
                 <span
                   className="absolute left-3 top-3 grid h-9 w-9 place-items-center
-                             rounded-lg border font-display text-sm backdrop-blur-sm"
+                             rounded-lg border font-display text-sm"
                   style={{
                     borderColor:
                       "color-mix(in srgb, var(--member) 40%, var(--border))",
                     background:
-                      "color-mix(in srgb, var(--member) 16%, rgba(10,10,11,0.7))",
+                      "color-mix(in srgb, var(--member) 18%, var(--surface))",
                     color: "var(--member)",
                   }}
                 >

@@ -65,7 +65,7 @@ export function HeroBackground() {
             className="absolute left-0 h-px w-full"
             style={{
               background:
-                "linear-gradient(90deg, transparent, rgba(212,160,23,0.55), transparent)",
+                "linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 55%, transparent), transparent)",
             }}
             animate={{ top: ["16%", "74%"], opacity: [0, 0.5, 0] }}
             transition={{
@@ -79,7 +79,7 @@ export function HeroBackground() {
             className="absolute top-0 h-full w-px"
             style={{
               background:
-                "linear-gradient(180deg, transparent, rgba(212,160,23,0.4), transparent)",
+                "linear-gradient(180deg, transparent, color-mix(in srgb, var(--accent) 42%, transparent), transparent)",
             }}
             animate={{ left: ["72%", "24%"], opacity: [0, 0.4, 0] }}
             transition={{

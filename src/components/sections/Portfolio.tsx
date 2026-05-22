@@ -7,6 +7,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Icon } from "@/components/ui/Icon";
 import { Spotlight } from "@/components/ui/Spotlight";
 import { GridBackdrop } from "@/components/ui/GridBackdrop";
+import { PortfolioCover } from "./PortfolioCover";
 import { cn } from "@/lib/utils";
 import {
   portfolio,
@@ -87,22 +88,13 @@ export function Portfolio() {
             >
               <Spotlight />
 
-              {/* Cover */}
-              <div
-                className="relative z-[1] flex aspect-[16/10] flex-col justify-between p-5"
-                style={{
-                  background: `linear-gradient(150deg, ${item.cover[0]}, ${item.cover[1]})`,
-                }}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="t-meta text-accent">{item.categoryLabel}</span>
-                  <span className="t-mono text-xs text-text-faint">{item.year}</span>
-                </div>
-                <span className="font-display text-4xl text-text/15 transition-colors
-                                 duration-300 group-hover:text-text/25">
-                  {item.title}
-                </span>
-              </div>
+              {/* Cover — generative motif per category */}
+              <PortfolioCover
+                category={item.category}
+                categoryLabel={item.categoryLabel}
+                year={item.year}
+                cover={item.cover}
+              />
 
               {/* Body */}
               <div className="relative z-[1] flex flex-1 flex-col gap-2 p-5">

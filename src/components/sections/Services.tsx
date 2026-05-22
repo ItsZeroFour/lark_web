@@ -48,7 +48,7 @@ export function Services() {
               {/* Decorative watermark index — sits far behind content */}
               <span
                 aria-hidden="true"
-                style={{ color: "rgba(243, 239, 232, 0.04)" }}
+                style={{ color: "color-mix(in srgb, var(--text) 5%, transparent)" }}
                 className="pointer-events-none absolute -bottom-6 -right-3 select-none
                            font-display text-[6rem] leading-none"
               >
@@ -112,7 +112,7 @@ export function Services() {
               <div className="relative mt-auto flex flex-col gap-3.5 border-t border-border pt-4">
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="t-meta text-text-faint">Стоимость</span>
-                  <span className="font-display text-base text-accent">
+                  <span className="font-display text-base text-accent tabular-nums">
                     {service.price}
                   </span>
                 </div>

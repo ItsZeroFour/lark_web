@@ -1,11 +1,15 @@
 /** The four-stage working process rendered as a timeline. */
 
+import type { IconName } from "@/components/ui/Icon";
+
 export interface ProcessStage {
   id: string;
   index: string;
   title: string;
   description: string;
   marker: string;
+  /** Stage glyph — drawn large and faint as a watermark on the card. */
+  icon: IconName;
 }
 
 export const processStages: ProcessStage[] = [
@@ -16,6 +20,7 @@ export const processStages: ProcessStage[] = [
     description:
       "Слушаем задачу без шаблонов. Разбираем контекст, ограничения и то, что на самом деле важно бизнесу.",
     marker: "diagnose",
+    icon: "circuit",
   },
   {
     id: "strategy",
@@ -24,6 +29,7 @@ export const processStages: ProcessStage[] = [
     description:
       "Собираем архитектуру решения: что строим, в каком порядке и почему именно так.",
     marker: "architect",
+    icon: "layers",
   },
   {
     id: "development",
@@ -32,6 +38,7 @@ export const processStages: ProcessStage[] = [
     description:
       "Делаем — короткими видимыми итерациями. Вы видите продукт по мере того, как он оживает.",
     marker: "execute",
+    icon: "code",
   },
   {
     id: "launch",
@@ -40,5 +47,6 @@ export const processStages: ProcessStage[] = [
     description:
       "Выводим в прод, стабилизируем, передаём управление. Остаёмся рядом для развития.",
     marker: "ship",
+    icon: "send",
   },
 ];
