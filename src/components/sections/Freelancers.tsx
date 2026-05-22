@@ -3,6 +3,9 @@
 import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
+import { Magnetic } from "@/components/ui/Magnetic";
+import { Spotlight } from "@/components/ui/Spotlight";
+import { GridBackdrop } from "@/components/ui/GridBackdrop";
 import { Icon } from "@/components/ui/Icon";
 import { revealVariants, revealViewport, staggerContainer } from "@/hooks/useReveal";
 import { contact } from "@/data/contacts";
@@ -25,8 +28,9 @@ const offers = [
 export function Freelancers() {
   return (
     <Section id="freelancers" divided>
-      <div className="overflow-hidden rounded-3xl border border-border bg-bg-secondary
-                      px-5 py-12 sm:px-10 sm:py-14 lg:px-14">
+      <div className="relative overflow-hidden rounded-3xl border border-border
+                      bg-bg-secondary px-5 py-12 sm:px-10 sm:py-14 lg:px-14">
+        <GridBackdrop variant="dots" />
         <motion.div
           variants={staggerContainer(0.1)}
           initial="hidden"
@@ -68,22 +72,30 @@ export function Freelancers() {
               <motion.li
                 key={o.title}
                 variants={revealVariants("up")}
-                className="rounded-2xl surface p-5 transition-colors duration-300
-                           hover:border-border-strong"
+                whileHover={{ y: -4 }}
+                transition={{ type: "spring", stiffness: 260, damping: 22 }}
+                className="group relative overflow-hidden rounded-2xl surface
+                           transition-[border-color,box-shadow] duration-300 ease-cinematic
+                           hover:border-border-strong hover:shadow-lift"
               >
-                <h3 className="font-display text-base">{o.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-text-muted">
-                  {o.body}
-                </p>
+                <Spotlight />
+                <div className="relative z-[1] p-5">
+                  <h3 className="font-display text-base">{o.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-text-muted">
+                    {o.body}
+                  </p>
+                </div>
               </motion.li>
             ))}
           </motion.ul>
 
           <motion.div variants={revealVariants("up")} className="mt-3">
-            <Button href={contact.joinEmail.href} external variant="secondary" size="lg">
-              Отправить заявку
-              <Icon name="arrow-up-right" size={16} />
-            </Button>
+            <Magnetic>
+              <Button href={contact.joinEmail.href} external variant="secondary" size="lg">
+                Отправить заявку
+                <Icon name="arrow-up-right" size={16} />
+              </Button>
+            </Magnetic>
           </motion.div>
         </motion.div>
       </div>

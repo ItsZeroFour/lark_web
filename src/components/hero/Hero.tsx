@@ -3,12 +3,13 @@
 import { motion } from "framer-motion";
 import { HeroBackground } from "./HeroBackground";
 import { Button } from "@/components/ui/Button";
+import { Magnetic } from "@/components/ui/Magnetic";
 import { Icon } from "@/components/ui/Icon";
 import { revealVariants, staggerContainer } from "@/hooks/useReveal";
 import { contact } from "@/data/contacts";
 
 const stats = [
-  { value: "4", label: "человека в команде" },
+  { value: "4", label: "человека в ядре команды" },
   { value: "AI", label: "native-процессы" },
   { value: "1 час", label: "до первого ответа" },
 ];
@@ -69,17 +70,21 @@ export function Hero() {
             variants={revealVariants("up")}
             className="mt-9 flex w-full flex-col gap-3 xs:w-auto xs:flex-row xs:items-center"
           >
-            <Button href="#contact" variant="primary" size="lg">
-              Обсудить проект
-              <Icon
-                name="arrow-right"
-                size={17}
-                className="transition-transform duration-300 group-hover:translate-x-0.5"
-              />
-            </Button>
-            <Button href="#portfolio" variant="secondary" size="lg">
-              Смотреть работы
-            </Button>
+            <Magnetic>
+              <Button href="#contact" variant="primary" size="lg" fullWidth>
+                Обсудить проект
+                <Icon
+                  name="arrow-right"
+                  size={17}
+                  className="transition-transform duration-300 group-hover:translate-x-0.5"
+                />
+              </Button>
+            </Magnetic>
+            <Magnetic>
+              <Button href="#portfolio" variant="secondary" size="lg" fullWidth>
+                Смотреть работы
+              </Button>
+            </Magnetic>
           </motion.div>
 
           {/* Trust line */}

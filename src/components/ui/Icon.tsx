@@ -26,7 +26,8 @@ export type IconName =
   | "mail"
   | "clock"
   | "shield"
-  | "wing";
+  | "wing"
+  | "user";
 
 interface IconProps extends SVGProps<SVGSVGElement> {
   name: IconName;
@@ -85,6 +86,12 @@ const paths: Record<IconName, JSX.Element> = {
   shield: <path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3Z" />,
   wing: (
     <path d="M3 18c5 0 9-3 11-9 1 4 4 6 7 6-4 2-7 5-9 9-1-4-5-6-9-6Z" />
+  ),
+  user: (
+    <>
+      <circle cx="12" cy="8.5" r="4" />
+      <path d="M4.5 20.5c0-4.2 3.4-6.8 7.5-6.8s7.5 2.6 7.5 6.8" />
+    </>
   ),
 };
 

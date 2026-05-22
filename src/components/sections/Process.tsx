@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Spotlight } from "@/components/ui/Spotlight";
 import { revealVariants, revealViewport, staggerContainer } from "@/hooks/useReveal";
 import { processStages } from "@/data/process";
 
@@ -57,26 +58,32 @@ export function Process() {
             {/* Node */}
             <span
               className="absolute left-[7px] top-1.5 grid h-[18px] w-[18px] place-items-center
-                         rounded-full border border-accent bg-bg"
+                         rounded-full border border-accent bg-bg
+                         shadow-[0_0_12px_2px_rgba(212,160,23,0.25)]"
               aria-hidden="true"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
             </span>
 
-            <div className="rounded-2xl surface p-5 transition-colors duration-300
-                            hover:border-border-strong sm:p-6">
-              <div className="mb-2 flex items-baseline gap-3">
-                <span className="font-display text-3xl text-accent">
-                  {stage.index}
-                </span>
-                <h3 className="t-card font-display">{stage.title}</h3>
-                <span className="t-meta ml-auto hidden text-text-faint sm:block">
-                  {stage.marker}
-                </span>
+            <div className="group relative overflow-hidden rounded-2xl surface
+                            transition-[border-color,box-shadow,transform] duration-300
+                            ease-cinematic hover:-translate-y-1 hover:border-border-strong
+                            hover:shadow-lift">
+              <Spotlight />
+              <div className="relative z-[1] p-5 sm:p-6">
+                <div className="mb-2 flex items-baseline gap-3">
+                  <span className="font-display text-3xl text-accent">
+                    {stage.index}
+                  </span>
+                  <h3 className="t-card font-display">{stage.title}</h3>
+                  <span className="t-meta ml-auto hidden text-text-faint sm:block">
+                    {stage.marker}
+                  </span>
+                </div>
+                <p className="max-w-[52ch] text-sm leading-relaxed text-text-muted">
+                  {stage.description}
+                </p>
               </div>
-              <p className="max-w-[52ch] text-sm leading-relaxed text-text-muted">
-                {stage.description}
-              </p>
             </div>
           </motion.li>
         ))}

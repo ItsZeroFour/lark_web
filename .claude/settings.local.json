@@ -20,7 +20,8 @@
       "Bash(npm i *)",
       "Bash(node shot.js)",
       "Bash(node *)",
-      "PowerShell(Get-NetTCPConnection *)"
+      "PowerShell(Get-NetTCPConnection *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000)"
     ]
   }
 }

@@ -61,7 +61,15 @@ export function Contact() {
             variants={revealVariants("up")}
             className="t-meta flex items-center gap-2.5 text-text-muted"
           >
-            <span className="inline-block h-px w-8 bg-accent" />
+            <span className="relative flex h-1.5 w-1.5" aria-hidden="true">
+              <span className="absolute inline-flex h-full w-full animate-ping
+                               rounded-full bg-accent opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+            </span>
+            <span
+              className="inline-block h-px w-7 bg-gradient-to-r from-accent to-transparent"
+              aria-hidden="true"
+            />
             08 — Контакты
           </motion.span>
           <motion.h2
@@ -107,6 +115,8 @@ export function Contact() {
             <motion.a
               key={ch.label}
               variants={revealVariants("left")}
+              whileHover={{ y: -3 }}
+              transition={{ type: "spring", stiffness: 260, damping: 22 }}
               href={ch.href}
               {...(ch.external
                 ? { target: "_blank", rel: "noopener noreferrer" }

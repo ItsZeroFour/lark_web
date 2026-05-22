@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Geologica, JetBrains_Mono } from "next/font/google";
 import { NoiseOverlay } from "@/components/ui/NoiseOverlay";
+import { Cursor } from "@/components/ui/Cursor";
 import { contact } from "@/data/contacts";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
@@ -146,6 +147,7 @@ export default function RootLayout({
       <body>
         {children}
         <NoiseOverlay opacity={0.025} />
+        <Cursor />
       </body>
     </html>
   );

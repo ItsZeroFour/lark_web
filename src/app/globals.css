@@ -69,10 +69,29 @@
     padding-inline: clamp(1.15rem, 4.5vw, 2.75rem);
   }
 
-  /* Clean solid surface — crisp 1px border, no heavy glass blur */
+  /* Solid surface card — crisp 1px border, quiet depth.
+     A soft drop shadow lifts it off the page; an inset top hairline
+     catches light along the upper edge for subtle materiality. */
   .surface {
     background: var(--surface);
     border: 1px solid var(--border);
+    box-shadow:
+      inset 0 1px 0 0 var(--card-top-light),
+      var(--card-shadow);
+  }
+
+  /* Decorative infrastructure grid — faint, masked, never distracting */
+  .grid-lines {
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  /* Faint dot field — alternative ambient texture */
+  .dot-field {
+    background-image: radial-gradient(var(--grid-line) 1.1px, transparent 1.1px);
+    background-size: 30px 30px;
   }
 
   /* Hairline divider */
@@ -101,6 +120,26 @@
   }
   .text-pretty {
     text-wrap: pretty;
+  }
+
+  /* Radial fade — keeps decorative backdrops soft toward the edges */
+  .mask-radial {
+    -webkit-mask-image: radial-gradient(
+      ellipse 65% 55% at 50% 42%,
+      #000 0%,
+      transparent 78%
+    );
+    mask-image: radial-gradient(
+      ellipse 65% 55% at 50% 42%,
+      #000 0%,
+      transparent 78%
+    );
+  }
+
+  /* Top-anchored fade for grids that should dissolve downward */
+  .mask-t {
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 85%);
+    mask-image: linear-gradient(180deg, #000 0%, transparent 85%);
   }
 
   /* Edge-fade mask for marquees */

@@ -27,10 +27,17 @@ export function Section({
       id={id}
       className={cn(
         "relative scroll-mt-24 py-16 sm:py-20 lg:py-24",
-        divided && "border-t border-border",
         className,
       )}
     >
+      {/* Gradient hairline divider — softer than a flat border */}
+      {divided && (
+        <span
+          aria-hidden="true"
+          className="absolute inset-x-0 top-0 h-px bg-gradient-to-r
+                     from-transparent via-border-strong to-transparent"
+        />
+      )}
       {contained ? <div className="shell relative">{children}</div> : children}
     </section>
   );

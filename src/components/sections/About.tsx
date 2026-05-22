@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Spotlight } from "@/components/ui/Spotlight";
+import { GridBackdrop } from "@/components/ui/GridBackdrop";
 import { Reveal } from "@/components/animations/Reveal";
 import { revealVariants, revealViewport, staggerContainer } from "@/hooks/useReveal";
 
@@ -24,6 +26,8 @@ const principles = [
 export function About() {
   return (
     <Section id="about">
+      <GridBackdrop variant="dots" />
+
       <div className="grid gap-10 lg:grid-cols-[1fr_0.92fr] lg:gap-16">
         {/* Statement */}
         <div className="flex flex-col gap-6">
@@ -58,18 +62,24 @@ export function About() {
             <motion.li
               key={p.title}
               variants={revealVariants("left")}
-              className="rounded-2xl surface p-5 transition-colors duration-300
-                         hover:border-border-strong"
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 260, damping: 22 }}
+              className="group relative overflow-hidden rounded-2xl surface
+                         transition-[border-color,box-shadow] duration-300 ease-cinematic
+                         hover:border-border-strong hover:shadow-lift"
             >
-              <div className="flex items-baseline gap-3">
-                <span className="t-mono text-sm text-accent">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="font-display text-lg">{p.title}</h3>
+              <Spotlight />
+              <div className="relative z-[1] p-5">
+                <div className="flex items-baseline gap-3">
+                  <span className="t-mono text-sm text-accent">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="font-display text-lg">{p.title}</h3>
+                </div>
+                <p className="mt-2 pl-8 text-sm leading-relaxed text-text-muted">
+                  {p.body}
+                </p>
               </div>
-              <p className="mt-2 pl-8 text-sm leading-relaxed text-text-muted">
-                {p.body}
-              </p>
             </motion.li>
           ))}
         </motion.ul>

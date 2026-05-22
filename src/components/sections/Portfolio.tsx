@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Icon } from "@/components/ui/Icon";
+import { Spotlight } from "@/components/ui/Spotlight";
+import { GridBackdrop } from "@/components/ui/GridBackdrop";
 import { cn } from "@/lib/utils";
 import {
   portfolio,
@@ -27,6 +29,8 @@ export function Portfolio() {
 
   return (
     <Section id="portfolio" divided>
+      <GridBackdrop variant="lines" />
+
       <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <SectionHeading
           eyebrow="04 — Портфолио"
@@ -75,13 +79,17 @@ export function Portfolio() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.97 }}
+              whileHover={{ y: -6 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="group flex cursor-pointer flex-col overflow-hidden rounded-2xl
-                         surface transition-colors duration-300 hover:border-border-strong"
+              className="group relative flex cursor-pointer flex-col overflow-hidden
+                         rounded-2xl surface transition-colors duration-300
+                         hover:border-border-strong hover:shadow-lift"
             >
+              <Spotlight />
+
               {/* Cover */}
               <div
-                className="relative flex aspect-[16/10] flex-col justify-between p-5"
+                className="relative z-[1] flex aspect-[16/10] flex-col justify-between p-5"
                 style={{
                   background: `linear-gradient(150deg, ${item.cover[0]}, ${item.cover[1]})`,
                 }}
@@ -97,7 +105,7 @@ export function Portfolio() {
               </div>
 
               {/* Body */}
-              <div className="flex flex-1 flex-col gap-2 p-5">
+              <div className="relative z-[1] flex flex-1 flex-col gap-2 p-5">
                 <div className="flex items-center justify-between gap-3">
                   <h3 className="t-card font-display">{item.title}</h3>
                   <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg

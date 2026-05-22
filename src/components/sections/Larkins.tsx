@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Icon } from "@/components/ui/Icon";
+import { GridBackdrop } from "@/components/ui/GridBackdrop";
 import { Reveal } from "@/components/animations/Reveal";
 import {
   BRIEF_LABELS,
@@ -89,6 +90,8 @@ export function Larkins() {
 
   return (
     <Section id="larkins-brief" divided>
+      <GridBackdrop variant="dots" />
+
       <div className="grid gap-9 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">
         {/* Narrative */}
         <div className="flex flex-col gap-5">

@@ -41,9 +41,18 @@ export function SectionHeading({
       {eyebrow && (
         <motion.span
           variants={revealVariants("up")}
-          className="t-meta text-text-muted flex items-center gap-3"
+          className="t-meta text-text-muted flex items-center gap-2.5"
         >
-          <span className="inline-block h-px w-8 bg-accent" aria-hidden="true" />
+          {/* Live status dot */}
+          <span className="relative flex h-1.5 w-1.5" aria-hidden="true">
+            <span className="absolute inline-flex h-full w-full animate-ping
+                             rounded-full bg-accent opacity-60" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+          </span>
+          <span
+            className="inline-block h-px w-7 bg-gradient-to-r from-accent to-transparent"
+            aria-hidden="true"
+          />
           {eyebrow}
         </motion.span>
       )}

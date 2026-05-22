@@ -6,6 +6,7 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Card } from "@/components/ui/Card";
 import { Glow } from "@/components/ui/Glow";
+import { GridBackdrop } from "@/components/ui/GridBackdrop";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { revealViewport, staggerContainer } from "@/hooks/useReveal";
 import { services } from "@/data/services";
@@ -20,8 +21,9 @@ const icons: Record<string, IconName> = {
 export function Services() {
   return (
     <Section id="services" divided>
-      {/* Quiet ambient warmth — one soft glow, never distracting */}
+      {/* Quiet ambient warmth + faint structural grid — never distracting */}
       <Glow className="-top-20 right-0 opacity-60" size={520} />
+      <GridBackdrop variant="lines" />
 
       <SectionHeading
         eyebrow="02 — Услуги"
