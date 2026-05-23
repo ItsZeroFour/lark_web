@@ -186,7 +186,11 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Capability marquee */}
+      {/* Capability marquee — two identical sets side by side; the animation
+         translates by exactly one set's width so the second set seamlessly
+         lands where the first started. Each set repeats the capability list
+         a few times so one set is always wider than any realistic viewport
+         (otherwise a wide screen sees a gap before the loop wraps). */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -194,14 +198,27 @@ export function Hero() {
         className="mask-x relative mt-16 flex overflow-hidden border-y border-border py-3.5 sm:mt-20"
       >
         <div className="anim-marquee flex shrink-0 items-center">
-          {[...capabilities, ...capabilities].map((cap, i) => (
-            <span
-              key={i}
-              className="flex items-center gap-6 whitespace-nowrap px-6 t-meta text-text-faint"
+          {[0, 1].map((setIdx) => (
+            <div
+              key={setIdx}
+              className="flex shrink-0 items-center"
+              aria-hidden={setIdx > 0 ? "true" : undefined}
             >
-              {cap}
-              <span className="h-1 w-1 rounded-full bg-accent/60" />
-            </span>
+              {[0, 1, 2].flatMap((cycleIdx) =>
+                capabilities.map((cap, i) => (
+                  <span
+                    key={`${setIdx}-${cycleIdx}-${i}`}
+                    className="flex items-center gap-6 whitespace-nowrap px-6 t-meta text-text-faint"
+                  >
+                    {cap}
+                    <span
+                      aria-hidden="true"
+                      className="h-1 w-1 rounded-full bg-accent/60"
+                    />
+                  </span>
+                )),
+              )}
+            </div>
           ))}
         </div>
       </motion.div>

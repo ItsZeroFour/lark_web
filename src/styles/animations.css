@@ -25,8 +25,12 @@
   }
 }
 
+/* Duration is sized to the content: one "set" of the track is 3 cycles of
+   the capability list (~3000+px), and the animation moves by one set per
+   loop. The duration preserves the same per-pixel travel speed as a single
+   short cycle would (~27 px/s) — calm, never frantic. */
 .anim-marquee {
-  animation: marquee 38s linear infinite;
+  animation: marquee 114s linear infinite;
 }
 
 /* Soft ping for live signal dots — like a quiet radar tick */
