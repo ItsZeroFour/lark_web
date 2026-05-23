@@ -107,6 +107,7 @@ export function LarkinsStage() {
               href={contact.telegram.url}
               target="_blank"
               rel="noopener noreferrer"
+              data-magnet="telegram"
               className="inline-flex items-center justify-center gap-2 rounded-full
                          border border-border-strong px-7 py-3.5 text-sm font-medium
                          cursor-pointer transition-colors duration-300

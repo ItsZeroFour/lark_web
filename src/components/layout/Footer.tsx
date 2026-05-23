@@ -88,6 +88,7 @@ export function Footer() {
                 href={contact.telegram.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-magnet="telegram"
                 className="group inline-flex items-center gap-2.5 rounded-full bg-accent
                            px-7 py-4 text-sm font-medium text-accent-ink cursor-pointer
                            transition-colors duration-300 hover:bg-accent-light"
@@ -149,6 +150,7 @@ export function Footer() {
               href={contact.telegram.url}
               target="_blank"
               rel="noopener noreferrer"
+              data-magnet="telegram"
               className="flex items-center gap-2 text-sm text-text-muted
                          transition-colors hover:text-accent cursor-pointer"
             >

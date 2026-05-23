@@ -15,6 +15,52 @@ import { cn } from "@/lib/utils";
 
 interface DisplayMessage extends ChatMessage {
   id: number;
+  /** Off-the-record exchange — not sent to the API, doesn't advance the brief. */
+  secret?: boolean;
+}
+
+/** Easter egg #16 — phrase → cinematic reply, off the record. */
+interface SecretPhrase {
+  patterns: RegExp[];
+  reply: string;
+}
+
+const SECRET_PHRASES: SecretPhrase[] = [
+  {
+    patterns: [
+      /^привет[!.?…\s]*$/i,
+      /^здравствуй(?:те)?[!.?…\s]*$/i,
+      /^хай[!.?…\s]*$/i,
+    ],
+    reply:
+      "Здравствуйте. Спокойнее, чем обычные ассистенты — и внимательнее. Когда будете готовы, расскажите задачу.",
+  },
+  {
+    patterns: [
+      /^ты\s+(живой|жив)\??[!.?…\s]*$/i,
+      /^живой\??[!.?…\s]*$/i,
+      /^ты\s+(человек|настоящий)\??[!.?…\s]*$/i,
+    ],
+    reply:
+      "Скажем так — внимателен. Меня собрала команда, которая делает живые продукты. Этого достаточно, чтобы понять задачу и передать её людям.",
+  },
+  {
+    patterns: [
+      /^расправь\s+крылья[!.?…\s]*$/i,
+      /^крылья[!.?…\s]*$/i,
+      /^полетели[!.?…\s]*$/i,
+    ],
+    reply:
+      "Принято. Курс на взлёт — расскажите, куда летим.",
+  },
+];
+
+function detectSecret(text: string): SecretPhrase | null {
+  const norm = text.trim().toLowerCase().replace(/\s+/g, " ");
+  for (const phrase of SECRET_PHRASES) {
+    if (phrase.patterns.some((p) => p.test(norm))) return phrase;
+  }
+  return null;
 }
 
 export function Larkins() {
@@ -24,6 +70,10 @@ export function Larkins() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
+  // Off-the-record exchanges don't count toward the brief.
+  const answered = messages.filter((m) => m.role === "user" && !m.secret).length;
+  // Increments on each secret phrase — drives the orb pulse via framer key.
+  const [pulse, setPulse] = useState(0);
 
   const logRef = useRef<HTMLDivElement>(null);
   const idRef = useRef(1);
@@ -34,11 +84,37 @@ export function Larkins() {
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
   }, [messages, busy]);
 
-  const answered = messages.filter((m) => m.role === "user").length;
-
   async function send() {
     const text = input.trim();
     if (!text || busy || done) return;
+
+    // Secret phrase — bypasses the API and the brief counter.
+    const secret = detectSecret(text);
+    if (secret) {
+      const userMsg: DisplayMessage = {
+        id: idRef.current++,
+        role: "user",
+        content: text,
+        secret: true,
+      };
+      setMessages((m) => [...m, userMsg]);
+      setInput("");
+      setBusy(true);
+      setPulse((p) => p + 1);
+      window.setTimeout(() => {
+        setMessages((m) => [
+          ...m,
+          {
+            id: idRef.current++,
+            role: "assistant",
+            content: secret.reply,
+            secret: true,
+          },
+        ]);
+        setBusy(false);
+      }, 520);
+      return;
+    }
 
     const userMsg: DisplayMessage = {
       id: idRef.current++,
@@ -55,7 +131,10 @@ export function Larkins() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: next.map(({ role, content }) => ({ role, content })),
+          // Strip off-the-record turns so the brief stays accurate.
+          messages: next
+            .filter((m) => !m.secret)
+            .map(({ role, content }) => ({ role, content })),
         }),
       });
       const data: { reply: string; done: boolean } = await res.json();
@@ -128,9 +207,26 @@ export function Larkins() {
             {/* Header */}
             <div className="flex items-center justify-between border-b border-border px-4 py-3.5">
               <div className="flex items-center gap-2.5">
-                <span className="grid h-8 w-8 place-items-center rounded-lg bg-accent">
+                <motion.span
+                  key={pulse}
+                  initial={{ scale: 1, boxShadow: "0 0 0 0 rgba(212,160,23,0)" }}
+                  animate={
+                    pulse > 0
+                      ? {
+                          scale: [1, 1.22, 1],
+                          boxShadow: [
+                            "0 0 0 0 rgba(212,160,23,0.5)",
+                            "0 0 0 10px rgba(212,160,23,0)",
+                            "0 0 0 0 rgba(212,160,23,0)",
+                          ],
+                        }
+                      : undefined
+                  }
+                  transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
+                  className="grid h-8 w-8 place-items-center rounded-lg bg-accent"
+                >
                   <Icon name="spark" size={15} className="text-accent-ink" />
-                </span>
+                </motion.span>
                 <div className="flex flex-col leading-tight">
                   <span className="text-sm font-medium">Larkins</span>
                   <span className="t-meta text-[0.62rem] text-text-faint">
@@ -188,6 +284,8 @@ export function Larkins() {
                       m.role === "user"
                         ? "self-end bg-accent text-accent-ink"
                         : "self-start border border-border bg-bg-tertiary text-text",
+                      m.secret && "italic",
+                      m.secret && m.role === "assistant" && "border-accent/40",
                     )}
                   >
                     {m.content}

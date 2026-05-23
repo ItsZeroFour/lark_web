@@ -121,6 +121,7 @@ export function Contact() {
               {...(ch.external
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
+              {...(ch.icon === "telegram" ? { "data-magnet": "telegram" } : {})}
               className={cnChannel(ch.primary)}
             >
               <span

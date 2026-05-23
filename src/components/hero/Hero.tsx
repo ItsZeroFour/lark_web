@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
 import { HeroBackground } from "./HeroBackground";
 import { Button } from "@/components/ui/Button";
 import { Magnetic } from "@/components/ui/Magnetic";
+import { KissingCTAs } from "@/components/ui/KissingCTAs";
 import { Icon } from "@/components/ui/Icon";
 import { revealVariants, staggerContainer } from "@/hooks/useReveal";
 import { contact } from "@/data/contacts";
@@ -12,12 +13,18 @@ import { contact } from "@/data/contacts";
 const headlineLine1 = ["Цифровые", "решения,"];
 const headlineLine2 = ["которые", "работают"];
 
-type Stat = { value: string; label: string; num?: number; suffix?: string };
+type Stat = {
+  value: string;
+  label: string;
+  num?: number;
+  suffix?: string;
+  kind?: "count" | "static" | "eta";
+};
 
 const stats: Stat[] = [
-  { value: "4", label: "человека в ядре команды", num: 4 },
-  { value: "AI", label: "native-процессы" },
-  { value: "1 час", label: "до первого ответа", num: 1, suffix: " час" },
+  { value: "4", label: "человека в ядре команды", num: 4, kind: "count" },
+  { value: "AI", label: "native-процессы", kind: "static" },
+  { value: "1 час", label: "до первого ответа", num: 1, suffix: " час", kind: "eta" },
 ];
 
 const capabilities = [
@@ -128,60 +135,83 @@ export function Hero() {
             Для бизнеса, который думает вперёд.
           </motion.p>
 
-          {/* CTAs */}
+          {/* CTAs — kissing pair: lips + hearts when magnetic pull aligns them */}
           <motion.div
             variants={revealVariants("up")}
-            className="mt-9 flex w-full flex-col gap-3 xs:w-auto xs:flex-row xs:items-center"
+            className="mt-9 w-full xs:w-auto"
           >
-            <Magnetic>
-              <Button href="#contact" variant="primary" size="lg" fullWidth>
-                Обсудить проект
-                <Icon
-                  name="arrow-right"
-                  size={17}
-                  className="transition-transform duration-300 group-hover:translate-x-0.5"
-                />
-              </Button>
-            </Magnetic>
-            <Magnetic>
-              <Button href="#portfolio" variant="secondary" size="lg" fullWidth>
-                Смотреть работы
-              </Button>
-            </Magnetic>
+            <KissingCTAs
+              primary={
+                <Magnetic>
+                  <Button href="#contact" variant="primary" size="lg" fullWidth>
+                    Обсудить проект
+                    <Icon
+                      name="arrow-right"
+                      size={17}
+                      className="transition-transform duration-300 group-hover:translate-x-0.5"
+                    />
+                  </Button>
+                </Magnetic>
+              }
+              secondary={
+                <Magnetic>
+                  <Button href="#portfolio" variant="secondary" size="lg" fullWidth>
+                    Смотреть работы
+                  </Button>
+                </Magnetic>
+              }
+            />
           </motion.div>
 
-          {/* Trust line */}
-          <motion.p
+          {/* Trust line + idle nudge */}
+          <motion.div
             variants={revealVariants("up")}
-            className="mt-5 flex items-center gap-2 text-sm text-text-faint"
+            className="relative mt-5 flex items-center gap-2 text-sm text-text-faint"
           >
-            <Icon name="telegram" size={15} className="text-accent" />
-            Ответим в Telegram {contact.responseTime}
-          </motion.p>
+            <Icon
+              name="telegram"
+              size={15}
+              className="text-accent"
+              data-magnet="telegram"
+            />
+            <span>Ответим в Telegram {contact.responseTime}</span>
+            <IdleNudge />
+          </motion.div>
 
           {/* Stats with count-up */}
           <motion.dl
             variants={revealVariants("up")}
             className="mt-12 flex w-full max-w-md overflow-hidden rounded-2xl surface"
           >
-            {stats.map((s, i) => (
-              <div
-                key={s.label}
-                className={`flex flex-1 flex-col items-center gap-1.5 px-3 py-5
-                            ${i > 0 ? "border-l border-border" : ""}`}
-              >
-                <dt className="font-display text-2xl amber tabular-nums sm:text-3xl">
-                  {s.num !== undefined ? (
-                    <CountUp to={s.num} delay={1.4 + i * 0.08} suffix={s.suffix} />
-                  ) : (
-                    s.value
-                  )}
-                </dt>
-                <dd className="text-center text-[0.66rem] leading-tight text-text-muted">
-                  {s.label}
-                </dd>
-              </div>
-            ))}
+            {stats.map((s, i) => {
+              const border = i > 0 ? "border-l border-border" : "";
+              if (s.kind === "eta") {
+                return (
+                  <LiveEtaCell
+                    key={s.label}
+                    delay={1.4 + i * 0.08}
+                    className={border}
+                  />
+                );
+              }
+              return (
+                <div
+                  key={s.label}
+                  className={`flex flex-1 flex-col items-center gap-1.5 px-3 py-5 ${border}`}
+                >
+                  <dt className="font-display text-2xl amber tabular-nums sm:text-3xl">
+                    {s.num !== undefined ? (
+                      <CountUp to={s.num} delay={1.4 + i * 0.08} suffix={s.suffix} />
+                    ) : (
+                      s.value
+                    )}
+                  </dt>
+                  <dd className="text-center text-[0.66rem] leading-tight text-text-muted">
+                    {s.label}
+                  </dd>
+                </div>
+              );
+            })}
           </motion.dl>
         </motion.div>
       </div>
@@ -223,6 +253,158 @@ export function Hero() {
         </div>
       </motion.div>
     </section>
+  );
+}
+
+/**
+ * Easter egg #10 — clicking the "1 час" stat reveals a live countdown to
+ * the next response checkpoint (top of the next hour). Toggles back to the
+ * idle "1 час" display on second click.
+ */
+function LiveEtaCell({
+  delay,
+  className = "",
+}: {
+  delay: number;
+  className?: string;
+}) {
+  const [live, setLive] = useState(false);
+  const [text, setText] = useState("00:00");
+
+  useEffect(() => {
+    if (!live) return;
+    const compute = () => {
+      const now = new Date();
+      const target = new Date(now);
+      target.setHours(now.getHours() + 1, 0, 0, 0);
+      const diff = Math.max(0, target.getTime() - now.getTime());
+      const m = Math.floor(diff / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      setText(
+        `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`,
+      );
+    };
+    compute();
+    const id = window.setInterval(compute, 1000);
+    return () => window.clearInterval(id);
+  }, [live]);
+
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      aria-pressed={live}
+      aria-label={
+        live ? "Скрыть живой обратный отсчёт" : "Показать живой обратный отсчёт"
+      }
+      onClick={() => setLive((v) => !v)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          setLive((v) => !v);
+        }
+      }}
+      className={`group relative flex flex-1 cursor-pointer flex-col items-center gap-1.5 px-3 py-5 outline-none transition-colors duration-300 hover:bg-bg-tertiary/40 focus-visible:bg-bg-tertiary/40 ${className}`}
+    >
+      {live && (
+        <span
+          aria-hidden="true"
+          className="absolute right-2 top-2 grid h-1.5 w-1.5 place-items-center"
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+          <span className="anim-ping-soft absolute inset-0 rounded-full bg-accent" />
+        </span>
+      )}
+      <dt className="font-display text-2xl amber tabular-nums sm:text-3xl">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.span
+            key={live ? "live" : "idle"}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-block"
+          >
+            {live ? text : <CountUp to={1} delay={delay} suffix=" час" />}
+          </motion.span>
+        </AnimatePresence>
+      </dt>
+      <dd className="text-center text-[0.66rem] leading-tight text-text-muted">
+        {live ? "до окна ответа" : "до первого ответа"}
+      </dd>
+    </div>
+  );
+}
+
+/**
+ * Easter egg #35 — after 90 seconds of total page inactivity (no movement,
+ * keystrokes, scrolls, or touches) a quiet line surfaces next to the trust
+ * row for ~4 seconds, then fades. Resets on any subsequent activity.
+ */
+function IdleNudge() {
+  const [visible, setVisible] = useState(false);
+  const showTimerRef = useRef<number | null>(null);
+  const hideTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const events: (keyof DocumentEventMap)[] = [
+      "pointermove",
+      "pointerdown",
+      "keydown",
+      "wheel",
+      "scroll",
+      "touchstart",
+    ];
+
+    const clear = () => {
+      if (showTimerRef.current) window.clearTimeout(showTimerRef.current);
+      if (hideTimerRef.current) window.clearTimeout(hideTimerRef.current);
+      showTimerRef.current = null;
+      hideTimerRef.current = null;
+    };
+
+    const arm = () => {
+      clear();
+      showTimerRef.current = window.setTimeout(() => {
+        setVisible(true);
+        hideTimerRef.current = window.setTimeout(() => {
+          setVisible(false);
+          arm();
+        }, 4000);
+      }, 90_000);
+    };
+
+    const onActivity = () => {
+      if (visible) return; // let it run its course
+      arm();
+    };
+
+    arm();
+    for (const ev of events) {
+      window.addEventListener(ev, onActivity, { passive: true });
+    }
+    return () => {
+      clear();
+      for (const ev of events) {
+        window.removeEventListener(ev, onActivity);
+      }
+    };
+  }, [visible]);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.span
+          initial={{ opacity: 0, x: -4 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 4 }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          className="ml-1 italic text-text-faint/80"
+        >
+          — ещё здесь? мы тоже, пишите
+        </motion.span>
+      )}
+    </AnimatePresence>
   );
 }
 

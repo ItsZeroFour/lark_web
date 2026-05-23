@@ -1,20 +1,51 @@
 "use client";
 
+import { useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/hooks/useTheme";
 import { Icon } from "@/components/ui/Icon";
+
+// Easter egg #23 — 5 toggle clicks within 2 s engages amber-only mode for 30 s.
+const SPAM_WINDOW_MS = 2000;
+const SPAM_THRESHOLD = 5;
+const AMBER_DURATION_MS = 30_000;
 
 /**
  * Dark / light theme switch. Renders a stable placeholder until mounted
  * to avoid hydration mismatch with the pre-paint theme script.
  */
 export function ThemeToggle() {
-  const { theme, toggleTheme, mounted } = useTheme();
+  const { theme, setTheme, toggleTheme, mounted } = useTheme();
+  const clickTimesRef = useRef<number[]>([]);
+  const amberTimerRef = useRef<number | null>(null);
+
+  const engageAmberMode = () => {
+    document.documentElement.setAttribute("data-mode", "amber");
+    setTheme("dark");
+    if (amberTimerRef.current) window.clearTimeout(amberTimerRef.current);
+    amberTimerRef.current = window.setTimeout(() => {
+      document.documentElement.removeAttribute("data-mode");
+      amberTimerRef.current = null;
+    }, AMBER_DURATION_MS);
+  };
+
+  const handleClick = () => {
+    toggleTheme();
+    const now = performance.now();
+    const recent = [...clickTimesRef.current, now].filter(
+      (t) => now - t <= SPAM_WINDOW_MS,
+    );
+    clickTimesRef.current = recent;
+    if (recent.length >= SPAM_THRESHOLD) {
+      clickTimesRef.current = [];
+      engageAmberMode();
+    }
+  };
 
   return (
     <button
       type="button"
-      onClick={toggleTheme}
+      onClick={handleClick}
       aria-label={
         theme === "dark"
           ? "Включить светлую тему"
