@@ -115,7 +115,7 @@ export function Contact() {
             <motion.a
               key={ch.label}
               variants={revealVariants("left")}
-              whileHover={{ y: -3 }}
+              whileHover={{ y: -4 }}
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
               href={ch.href}
               {...(ch.external

@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 import { Button } from "@/components/ui/Button";
 import { Magnetic } from "@/components/ui/Magnetic";
+import { Logo } from "@/components/ui/Logo";
 import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/utils";
 
@@ -90,11 +91,13 @@ export function Navbar() {
             href="/"
             onClick={() => setOpen(false)}
             aria-label="Lark Freelance — на главную"
-            className="flex items-center gap-2.5 cursor-pointer"
+            className="group flex items-center gap-2 cursor-pointer"
           >
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-accent">
-              <Icon name="wing" size={17} className="text-accent-ink" />
-            </span>
+            <Logo
+              size={30}
+              className="text-accent transition-transform duration-300
+                         ease-cinematic group-hover:-translate-y-0.5"
+            />
             <span className="font-display text-lg tracking-tight">
               Lark<span className="text-text-muted"> Freelance</span>
             </span>

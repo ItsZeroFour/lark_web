@@ -5,7 +5,6 @@ import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { Spotlight } from "@/components/ui/Spotlight";
-import { GridBackdrop } from "@/components/ui/GridBackdrop";
 import { Icon } from "@/components/ui/Icon";
 import { revealVariants, revealViewport, staggerContainer } from "@/hooks/useReveal";
 import { contact } from "@/data/contacts";
@@ -30,7 +29,6 @@ export function Freelancers() {
     <Section id="freelancers" divided>
       <div className="relative overflow-hidden rounded-3xl border border-border
                       bg-bg-secondary px-5 py-12 sm:px-10 sm:py-14 lg:px-14">
-        <GridBackdrop variant="dots" />
         <motion.div
           variants={staggerContainer(0.1)}
           initial="hidden"

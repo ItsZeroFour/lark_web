@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Spotlight } from "@/components/ui/Spotlight";
-import { GridBackdrop } from "@/components/ui/GridBackdrop";
 import { Reveal } from "@/components/animations/Reveal";
 import { revealVariants, revealViewport, staggerContainer } from "@/hooks/useReveal";
 
@@ -26,8 +25,6 @@ const principles = [
 export function About() {
   return (
     <Section id="about">
-      <GridBackdrop variant="dots" />
-
       <div className="grid gap-10 lg:grid-cols-[1fr_0.92fr] lg:gap-16">
         {/* Statement */}
         <div className="flex flex-col gap-6">

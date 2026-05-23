@@ -21,7 +21,16 @@
       "Bash(node shot.js)",
       "Bash(node *)",
       "PowerShell(Get-NetTCPConnection *)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000)",
+      "Bash(chromium-cli --version)",
+      "Bash(npx --version)",
+      "Bash(npm list *)",
+      "Bash(npm ls *)",
+      "Bash(cd /tmp)",
+      "Bash(npm install *)",
+      "Bash(timeout 30 bash -c 'until curl -sf http://localhost:3000 >/dev/null 2>&1; do sleep 1; done')",
+      "Bash(npx playwright *)",
+      "Bash(curl -sf http://localhost:3000 -o /dev/null)"
     ]
   }
 }

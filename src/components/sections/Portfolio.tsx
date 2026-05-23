@@ -80,7 +80,7 @@ export function Portfolio() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.97 }}
-              whileHover={{ y: -6 }}
+              whileHover={{ y: -4 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="group relative flex cursor-pointer flex-col overflow-hidden
                          rounded-2xl surface transition-colors duration-300

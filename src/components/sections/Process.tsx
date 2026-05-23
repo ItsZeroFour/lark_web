@@ -75,24 +75,15 @@ export function Process() {
                             hover:shadow-lift">
               <Spotlight />
 
-              {/* Stage glyph — large, faint, fills the open right side */}
-              <Icon
-                name={stage.icon}
-                size={132}
-                className="pointer-events-none absolute -right-3 top-1/2 z-0 hidden
-                           -translate-y-1/2 text-accent opacity-[0.07] transition-opacity
-                           duration-300 group-hover:opacity-[0.13] sm:block"
-              />
-
               <div className="relative z-[1] p-5 sm:p-6">
                 <div className="mb-2 flex items-center gap-3">
-                  {/* Stage icon plate */}
+                  {/* Stage icon plate — matches the Services card plates */}
                   <span
-                    className="grid h-10 w-10 shrink-0 place-items-center rounded-xl
+                    className="grid h-11 w-11 shrink-0 place-items-center rounded-xl
                                border border-border bg-bg text-accent transition-colors
                                duration-300 group-hover:border-accent/40"
                   >
-                    <Icon name={stage.icon} size={18} />
+                    <Icon name={stage.icon} size={20} />
                   </span>
                   <span className="font-display text-3xl text-accent">
                     {stage.index}

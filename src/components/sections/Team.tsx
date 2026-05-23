@@ -6,7 +6,6 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Glow } from "@/components/ui/Glow";
 import { Spotlight } from "@/components/ui/Spotlight";
-import { GridBackdrop } from "@/components/ui/GridBackdrop";
 import { Icon } from "@/components/ui/Icon";
 import { revealVariants, revealViewport, staggerContainer } from "@/hooks/useReveal";
 import { team } from "@/data/team";
@@ -14,9 +13,8 @@ import { team } from "@/data/team";
 export function Team() {
   return (
     <Section id="team" divided>
-      {/* Quiet ambient warmth + faint dot field — never distracting */}
+      {/* One quiet ambient warmth — never distracting */}
       <Glow className="-top-16 left-1/4 opacity-50" size={520} />
-      <GridBackdrop variant="dots" />
 
       <SectionHeading
         eyebrow="05 — Команда"
@@ -35,7 +33,7 @@ export function Team() {
           <motion.li
             key={member.id}
             variants={revealVariants("up")}
-            whileHover={{ y: -6 }}
+            whileHover={{ y: -4 }}
             transition={{ type: "spring", stiffness: 260, damping: 22 }}
             style={
               {
@@ -48,17 +46,6 @@ export function Team() {
                        hover:border-border-strong hover:shadow-lift"
           >
             <Spotlight />
-
-            {/* Personal colour haze pooled in the corner */}
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute -right-10 -top-12 z-[2] h-32 w-32
-                         rounded-full opacity-50 blur-2xl transition-opacity duration-300
-                         group-hover/card:opacity-90"
-              style={{
-                background: "color-mix(in srgb, var(--member) 42%, transparent)",
-              }}
-            />
 
             {/* Hover accent line along the top edge */}
             <span

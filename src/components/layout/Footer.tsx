@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Icon } from "@/components/ui/Icon";
+import { Logo } from "@/components/ui/Logo";
 import { Glow } from "@/components/ui/Glow";
 import { GridBackdrop } from "@/components/ui/GridBackdrop";
 import { Magnetic } from "@/components/ui/Magnetic";
@@ -49,11 +50,9 @@ export function Footer() {
           className="relative flex flex-col items-center gap-6 border-b border-border
                      py-20 text-center sm:py-28"
         >
-          {/* Giant wing watermark */}
-          <Icon
-            name="wing"
-            size={420}
-            aria-hidden="true"
+          {/* Giant brandmark watermark */}
+          <Logo
+            size={400}
             className="pointer-events-none absolute left-1/2 top-1/2 -z-10
                        -translate-x-1/2 -translate-y-1/2 text-accent opacity-[0.05]"
           />
@@ -110,9 +109,7 @@ export function Footer() {
           {/* Brand */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
-              <span className="grid h-7 w-7 place-items-center rounded-md bg-accent">
-                <Icon name="wing" size={15} className="text-accent-ink" />
-              </span>
+              <Logo size={26} className="text-accent" />
               <span className="font-display text-base">Lark Freelance</span>
             </div>
             <p className="text-sm leading-relaxed text-text-muted">

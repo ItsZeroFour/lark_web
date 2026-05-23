@@ -24,6 +24,8 @@ export function Spotlight({ className, size = 280 }: SpotlightProps) {
     const el = ref.current;
     const parent = el?.parentElement;
     if (!el || !parent) return;
+    // Skip entirely on touch / coarse pointers — there is no hover to track.
+    if (!window.matchMedia("(pointer: fine)").matches) return;
 
     const onMove = (e: PointerEvent) => {
       const r = parent.getBoundingClientRect();

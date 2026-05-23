@@ -45,16 +45,6 @@ export function Services() {
               featured={service.featured}
               className="group/card flex h-full flex-col gap-4"
             >
-              {/* Decorative watermark index — sits far behind content */}
-              <span
-                aria-hidden="true"
-                style={{ color: "color-mix(in srgb, var(--text) 5%, transparent)" }}
-                className="pointer-events-none absolute -bottom-6 -right-3 select-none
-                           font-display text-[6rem] leading-none"
-              >
-                {service.index}
-              </span>
-
               {/* Hover accent line along the top edge */}
               <span
                 aria-hidden="true"

@@ -35,7 +35,7 @@ export function Card({
   return (
     <MotionTag
       variants={revealVariants("up")}
-      whileHover={interactive ? { y: -6 } : undefined}
+      whileHover={interactive ? { y: -4 } : undefined}
       transition={{ type: "spring", stiffness: 260, damping: 22 }}
       className={cn(
         "relative overflow-hidden rounded-2xl surface p-6 sm:p-7",
