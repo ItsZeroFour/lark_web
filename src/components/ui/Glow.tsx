@@ -15,7 +15,7 @@ export function Glow({ className, size = 480 }: GlowProps) {
     <div
       aria-hidden="true"
       className={cn(
-        "pointer-events-none absolute -z-10 rounded-full blur-[120px]",
+        "pointer-events-none absolute -z-10 rounded-full blur-[80px]",
         className,
       )}
       style={{

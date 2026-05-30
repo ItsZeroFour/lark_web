@@ -39,7 +39,7 @@ export function HeroBackground() {
       {/* Breathing AI-core glow behind the headline */}
       <motion.div
         className="absolute left-1/2 top-[44%] h-[460px] w-[460px]
-                   -translate-x-1/2 -translate-y-1/2 rounded-full blur-[120px]"
+                   -translate-x-1/2 -translate-y-1/2 rounded-full blur-[80px]"
         style={{
           background: "radial-gradient(circle, var(--glow) 0%, transparent 68%)",
         }}
@@ -100,37 +100,49 @@ export function HeroBackground() {
         </>
       )}
 
-      {/* Travelling light beams — desktop only (they animate layout props) */}
+      {/* Travelling light beams — desktop only.
+         Animate translateY/translateX of full-size wrappers instead of top/left,
+         so the browser composites on GPU rather than re-running layout per frame. */}
       {!reduce && desktop && (
         <>
           <motion.div
-            className="absolute left-0 h-px w-full"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 55%, transparent), transparent)",
-            }}
-            animate={{ top: ["16%", "74%"], opacity: [0, 0.5, 0] }}
+            className="absolute inset-0"
+            initial={{ y: "16%" }}
+            animate={{ y: ["16%", "74%"], opacity: [0, 0.5, 0] }}
             transition={{
               duration: 9,
               repeat: Infinity,
               ease: "easeInOut",
               repeatDelay: 2.5,
             }}
-          />
+          >
+            <div
+              className="absolute left-0 top-0 h-px w-full"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 55%, transparent), transparent)",
+              }}
+            />
+          </motion.div>
           <motion.div
-            className="absolute top-0 h-full w-px"
-            style={{
-              background:
-                "linear-gradient(180deg, transparent, color-mix(in srgb, var(--accent) 42%, transparent), transparent)",
-            }}
-            animate={{ left: ["72%", "24%"], opacity: [0, 0.4, 0] }}
+            className="absolute inset-0"
+            initial={{ x: "72%" }}
+            animate={{ x: ["72%", "24%"], opacity: [0, 0.4, 0] }}
             transition={{
               duration: 11,
               repeat: Infinity,
               ease: "easeInOut",
               repeatDelay: 4,
             }}
-          />
+          >
+            <div
+              className="absolute left-0 top-0 h-full w-px"
+              style={{
+                background:
+                  "linear-gradient(180deg, transparent, color-mix(in srgb, var(--accent) 42%, transparent), transparent)",
+              }}
+            />
+          </motion.div>
         </>
       )}
 

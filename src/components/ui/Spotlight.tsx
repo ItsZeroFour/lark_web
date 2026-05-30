@@ -27,10 +27,22 @@ export function Spotlight({ className, size = 280 }: SpotlightProps) {
     // Skip entirely on touch / coarse pointers — there is no hover to track.
     if (!window.matchMedia("(pointer: fine)").matches) return;
 
+    // rAF-throttle: at most one style write per animation frame.
+    let frame = 0;
+    let lastX = 0;
+    let lastY = 0;
+
+    const flush = () => {
+      frame = 0;
+      el.style.setProperty("--sx", `${lastX}px`);
+      el.style.setProperty("--sy", `${lastY}px`);
+    };
+
     const onMove = (e: PointerEvent) => {
       const r = parent.getBoundingClientRect();
-      el.style.setProperty("--sx", `${e.clientX - r.left}px`);
-      el.style.setProperty("--sy", `${e.clientY - r.top}px`);
+      lastX = e.clientX - r.left;
+      lastY = e.clientY - r.top;
+      if (!frame) frame = requestAnimationFrame(flush);
     };
     const onEnter = () => {
       el.style.opacity = "1";
@@ -39,13 +51,14 @@ export function Spotlight({ className, size = 280 }: SpotlightProps) {
       el.style.opacity = "0";
     };
 
-    parent.addEventListener("pointermove", onMove);
-    parent.addEventListener("pointerenter", onEnter);
-    parent.addEventListener("pointerleave", onLeave);
+    parent.addEventListener("pointermove", onMove, { passive: true });
+    parent.addEventListener("pointerenter", onEnter, { passive: true });
+    parent.addEventListener("pointerleave", onLeave, { passive: true });
     return () => {
       parent.removeEventListener("pointermove", onMove);
       parent.removeEventListener("pointerenter", onEnter);
       parent.removeEventListener("pointerleave", onLeave);
+      if (frame) cancelAnimationFrame(frame);
     };
   }, []);
 
