@@ -34,7 +34,7 @@
 .t-meta {
   font-family: var(--font-mono), monospace;
   font-size: 0.72rem;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .t-lead {
-  font-size: clamp(1.05rem, 1.5vw, 1.22rem);
-  line-height: 1.6;
+  font-size: clamp(1.15rem, 1.7vw, 1.35rem);
+  line-height: 1.55;
   max-width: 52ch;
 }

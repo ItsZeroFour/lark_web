@@ -81,7 +81,7 @@ export function Services() {
               </div>
 
               {/* Summary — fixed height so the divider lands on one line */}
-              <p className="relative min-h-[7.25rem] text-sm leading-relaxed text-text-muted">
+              <p className="relative min-h-[8.5rem] text-[0.95rem] leading-relaxed text-text-muted">
                 {service.summary}
               </p>
 
@@ -102,7 +102,7 @@ export function Services() {
               <div className="relative mt-auto flex flex-col gap-3.5 border-t border-border pt-4">
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="t-meta text-text-faint">Стоимость</span>
-                  <span className="font-display text-base text-accent tabular-nums">
+                  <span className="font-display text-base text-text tabular-nums">
                     {service.price}
                   </span>
                 </div>

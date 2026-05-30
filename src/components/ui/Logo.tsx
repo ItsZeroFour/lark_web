@@ -15,7 +15,7 @@ export function Logo({ size = 28, ...rest }: LogoProps) {
     <svg
       width={size}
       height={size}
-      viewBox="0 0 28 28"
+      viewBox="0 -1.5 28 28"
       fill="none"
       aria-hidden="true"
       {...rest}
