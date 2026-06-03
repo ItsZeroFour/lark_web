@@ -147,7 +147,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        <NoiseOverlay opacity={0.025} />
+        <NoiseOverlay opacity={0.045} />
         <Cursor />
         <ConsoleSignature />
       </body>

@@ -36,6 +36,10 @@ export function Team() {
               variants={revealVariants("up")}
               whileHover={{ y: -4 }}
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
+<<<<<<< HEAD
+=======
+              tabIndex={0}
+>>>>>>> bcfa3d21b18e4154cd1376fd085d134d94b04674
               style={
                 {
                   "--member": member.accent,

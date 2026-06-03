@@ -19,11 +19,11 @@ interface NoiseOverlayProps {
   opacity?: number;
 }
 
-export function NoiseOverlay({ opacity = 0.022 }: NoiseOverlayProps) {
+export function NoiseOverlay({ opacity = 0.04 }: NoiseOverlayProps) {
   return (
     <div
       aria-hidden="true"
-      className="fixed inset-0 z-[60] pointer-events-none mix-blend-overlay"
+      className="fixed inset-0 z-[60] pointer-events-none"
       style={{
         opacity,
         backgroundImage: `url("${NOISE_SVG}")`,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type ReactNode, type PointerEvent } from "react";
+import { useEffect, useRef, type ReactNode, type PointerEvent } from "react";
 import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 
 interface MagneticProps {
@@ -29,14 +29,35 @@ export function Magnetic({
   const sx = useSpring(x, spring);
   const sy = useSpring(y, spring);
 
+  // rAF-throttle: stash latest pointer, flush at most once per frame.
+  const frameRef = useRef(0);
+  const lastRef = useRef({ cx: 0, cy: 0 });
+
+  useEffect(() => {
+    return () => {
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
+  }, []);
+
   const handleMove = (e: PointerEvent<HTMLDivElement>) => {
     if (reduce || !ref.current) return;
-    const r = ref.current.getBoundingClientRect();
-    x.set((e.clientX - (r.left + r.width / 2)) * strength);
-    y.set((e.clientY - (r.top + r.height / 2)) * strength);
+    lastRef.current.cx = e.clientX;
+    lastRef.current.cy = e.clientY;
+    if (frameRef.current) return;
+    frameRef.current = requestAnimationFrame(() => {
+      frameRef.current = 0;
+      if (!ref.current) return;
+      const r = ref.current.getBoundingClientRect();
+      x.set((lastRef.current.cx - (r.left + r.width / 2)) * strength);
+      y.set((lastRef.current.cy - (r.top + r.height / 2)) * strength);
+    });
   };
 
   const reset = () => {
+    if (frameRef.current) {
+      cancelAnimationFrame(frameRef.current);
+      frameRef.current = 0;
+    }
     x.set(0);
     y.set(0);
   };

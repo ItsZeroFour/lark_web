@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 // Easter egg #22 — Telegram magnet. When the real pointer enters this radius
@@ -27,6 +27,10 @@ export function Cursor() {
   const rx = useSpring(x, spring);
   const ry = useSpring(y, spring);
 
+  // Last reported pointer state — read inside rAF; never inside pointermove.
+  const lastRef = useRef({ px: -100, py: -100, target: null as Element | null });
+  const frameRef = useRef(0);
+
   useEffect(() => {
     const fine = window.matchMedia("(pointer: fine)").matches;
     const noMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -35,23 +39,38 @@ export function Cursor() {
 
     const interactive = "a, button, [role='button'], input, textarea, label, summary";
 
-    /** Find the closest visible telegram-magnet element to the pointer.
-     *  Returns the lerp strength (0–1) and centre coords, or null. */
-    const findTelegramPull = (px: number, py: number) => {
-      const targets = Array.from(
-        document.querySelectorAll<HTMLElement>('[data-magnet="telegram"]'),
-      );
-      let best: { cx: number; cy: number; edge: number } | null = null;
-      for (const el of targets) {
+    // Cache magnet target rects rather than walking the DOM on every move.
+    // The list is small (1 icon today) and only changes on layout — so we
+    // refresh on resize, scroll, and visibility changes.
+    type MagnetTarget = { cx: number; cy: number; w: number; h: number };
+    let magnets: MagnetTarget[] = [];
+
+    const refreshMagnets = () => {
+      const els = document.querySelectorAll<HTMLElement>('[data-magnet="telegram"]');
+      const next: MagnetTarget[] = [];
+      for (const el of els) {
         const r = el.getBoundingClientRect();
         if (r.width <= 0 || r.height <= 0) continue;
-        const cx = r.left + r.width / 2;
-        const cy = r.top + r.height / 2;
-        const ex = Math.max(0, Math.abs(px - cx) - r.width / 2);
-        const ey = Math.max(0, Math.abs(py - cy) - r.height / 2);
+        next.push({
+          cx: r.left + r.width / 2,
+          cy: r.top + r.height / 2,
+          w: r.width,
+          h: r.height,
+        });
+      }
+      magnets = next;
+    };
+
+    refreshMagnets();
+
+    const findTelegramPull = (px: number, py: number) => {
+      let best: { cx: number; cy: number; edge: number } | null = null;
+      for (const m of magnets) {
+        const ex = Math.max(0, Math.abs(px - m.cx) - m.w / 2);
+        const ey = Math.max(0, Math.abs(py - m.cy) - m.h / 2);
         const edge = Math.hypot(ex, ey);
         if (edge < MAGNET_RADIUS && (!best || edge < best.edge)) {
-          best = { cx, cy, edge };
+          best = { cx: m.cx, cy: m.cy, edge };
         }
       }
       if (!best) return null;
@@ -59,33 +78,48 @@ export function Cursor() {
       return { cx: best.cx, cy: best.cy, strength };
     };
 
-    const onMove = (e: PointerEvent) => {
-      const pull = findTelegramPull(e.clientX, e.clientY);
+    // rAF-throttled processor: pointermove just stashes the latest event,
+    // the frame applies it. Caps work at one update per animation frame.
+    const flush = () => {
+      frameRef.current = 0;
+      const { px, py, target } = lastRef.current;
+      const pull = findTelegramPull(px, py);
       if (pull) {
-        // Eased pull toward the icon centre — strong when near the edge,
-        // full snap when the pointer already overlaps the icon.
         const k = 0.55 + pull.strength * 0.35;
-        x.set(e.clientX + (pull.cx - e.clientX) * k);
-        y.set(e.clientY + (pull.cy - e.clientY) * k);
+        x.set(px + (pull.cx - px) * k);
+        y.set(py + (pull.cy - py) * k);
         setSnapped(true);
       } else {
-        x.set(e.clientX);
-        y.set(e.clientY);
+        x.set(px);
+        y.set(py);
         setSnapped(false);
       }
-      const el = e.target as Element | null;
-      setActive(Boolean(el && el.closest(interactive)));
+      setActive(Boolean(target && target.closest(interactive)));
+    };
+
+    const onMove = (e: PointerEvent) => {
+      lastRef.current.px = e.clientX;
+      lastRef.current.py = e.clientY;
+      lastRef.current.target = e.target as Element | null;
+      if (!frameRef.current) {
+        frameRef.current = requestAnimationFrame(flush);
+      }
     };
     const onDown = () => setPressed(true);
     const onUp = () => setPressed(false);
 
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerdown", onDown);
-    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerdown", onDown, { passive: true });
+    window.addEventListener("pointerup", onUp, { passive: true });
+    window.addEventListener("resize", refreshMagnets, { passive: true });
+    window.addEventListener("scroll", refreshMagnets, { passive: true });
     return () => {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("resize", refreshMagnets);
+      window.removeEventListener("scroll", refreshMagnets);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
     };
   }, [x, y]);
 
