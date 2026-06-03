@@ -48,7 +48,7 @@ export function Cursor() {
     const refreshMagnets = () => {
       const els = document.querySelectorAll<HTMLElement>('[data-magnet="telegram"]');
       const next: MagnetTarget[] = [];
-      for (const el of els) {
+      for (const el of Array.from(els)) {
         const r = el.getBoundingClientRect();
         if (r.width <= 0 || r.height <= 0) continue;
         next.push({
