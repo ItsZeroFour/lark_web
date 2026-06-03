@@ -1,0 +1,59 @@
+// Lark Freelance — admin data model.
+// Datasource: PostgreSQL (Neon/Supabase). Connection via DATABASE_URL.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Auth ────────────────────────────────────────────────
+enum Role {
+  ADMIN
+  EDITOR
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  role         Role     @default(EDITOR)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ── Larkins leads (briefs collected by the chat) ────────
+enum LeadStatus {
+  NEW
+  IN_PROGRESS
+  PROPOSAL_SENT
+  WON
+  LOST
+}
+
+model Lead {
+  id         String     @id @default(cuid())
+  // The five brief answers, in order.
+  task       String     @db.Text
+  business   String?    @db.Text
+  references String?    @db.Text
+  budget     String?    @db.Text
+  timeline   String?    @db.Text
+  // Derived B2B context tag shown in the spec panel.
+  tag        String?
+  // Full chat transcript: [{ role, content }, ...].
+  transcript Json
+  status     LeadStatus @default(NEW)
+  source     String     @default("larkins")
+  // Internal notes added by the team in the admin panel.
+  note       String?    @db.Text
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}

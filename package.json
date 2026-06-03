@@ -5,18 +5,31 @@
   "description": "Lark Freelance — AI-native digital agency website",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.32.1",
+    "@prisma/client": "^6.19.3",
+    "bcryptjs": "^3.0.3",
     "framer-motion": "11.11.17",
     "next": "^14.2.35",
+    "next-auth": "^5.0.0-beta.31",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "20.16.11",
     "@types/react": "18.3.11",
     "@types/react-dom": "18.3.0",
@@ -24,7 +37,9 @@
     "eslint": "8.57.1",
     "eslint-config-next": "^14.2.35",
     "postcss": "8.4.47",
+    "prisma": "^6.19.3",
     "tailwindcss": "3.4.14",
+    "tsx": "^4.22.4",
     "typescript": "5.6.3"
   }
 }
