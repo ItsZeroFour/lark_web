@@ -1,32 +1,21 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { type CSSProperties } from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Icon } from "@/components/ui/Icon";
 import { Spotlight } from "@/components/ui/Spotlight";
 import { GridBackdrop } from "@/components/ui/GridBackdrop";
-import { PortfolioCover } from "./PortfolioCover";
-import { cn } from "@/lib/utils";
-import {
-  portfolio,
-  portfolioFilters,
-  type PortfolioCategory,
-} from "@/data/portfolio";
+import { Button } from "@/components/ui/Button";
+import { revealVariants, revealViewport, staggerContainer } from "@/hooks/useReveal";
+import { portfolio } from "@/data/portfolio";
 
-type Filter = PortfolioCategory | "all";
-
+/** Home section — a curated preview that links into the full gallery. */
 export function Portfolio() {
-  const [active, setActive] = useState<Filter>("all");
-
-  const items = useMemo(
-    () =>
-      active === "all"
-        ? portfolio
-        : portfolio.filter((p) => p.category === active),
-    [active],
-  );
+  // Lead with the strongest, most varied covers.
+  const featured = portfolio.slice(0, 6);
 
   return (
     <Section id="portfolio" divided>
@@ -36,65 +25,86 @@ export function Portfolio() {
         <SectionHeading
           eyebrow="04 — Портфолио"
           title="Работы, которые <em>ушли в прод</em>"
-          description="Проекты разных направлений — от веб-платформ до автономных AI-агентов."
+          description="Лендинги, e-commerce, промо-кампании и интерактивные игры — от стоматологии до футбольных промо."
         />
 
-        {/* Filters — wrap instead of horizontal scroll so nothing is clipped */}
-        <div
-          role="tablist"
-          aria-label="Фильтр работ"
-          className="flex flex-wrap gap-1.5 lg:justify-end"
-        >
-          {portfolioFilters.map((f) => {
-            const isActive = active === f.id;
-            return (
-              <button
-                key={f.id}
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => setActive(f.id)}
-                className={cn(
-                  "shrink-0 rounded-full border px-3.5 py-2 text-sm cursor-pointer",
-                  "transition-colors duration-200",
-                  isActive
-                    ? "border-accent bg-accent text-accent-ink"
-                    : "border-border text-text-muted hover:border-border-strong hover:text-text",
-                )}
-              >
-                {f.label}
-              </button>
-            );
-          })}
-        </div>
+        <Button href="/portfolio" variant="secondary" className="self-start lg:self-auto">
+          Все работы
+          <Icon name="arrow-up-right" size={15} />
+        </Button>
       </div>
 
       <motion.div
-        layout
+        variants={staggerContainer(0.08)}
+        initial="hidden"
+        whileInView="visible"
+        viewport={revealViewport}
         className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
       >
-        <AnimatePresence mode="popLayout">
-          {items.map((item) => (
-            <motion.article
-              key={item.id}
-              layout
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.97 }}
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="group relative flex cursor-pointer flex-col overflow-hidden
-                         rounded-2xl surface transition-colors duration-300
-                         hover:border-border-strong hover:shadow-lift"
+        {featured.map((item) => (
+          <motion.article
+            key={item.slug}
+            variants={revealVariants("up")}
+            whileHover={{ y: -4 }}
+            transition={{ type: "spring", stiffness: 260, damping: 22 }}
+            style={{ "--member": item.accent } as CSSProperties}
+            className="group relative"
+          >
+            <Link
+              href={`/portfolio/${item.slug}`}
+              className="relative flex h-full flex-col overflow-hidden rounded-2xl
+                         surface transition-[border-color,box-shadow] duration-300
+                         hover:border-border-strong hover:shadow-lift
+                         focus-visible:outline-none focus-visible:border-accent/60"
             >
               <Spotlight />
 
-              {/* Cover — generative motif per category */}
-              <PortfolioCover
-                category={item.category}
-                categoryLabel={item.categoryLabel}
-                year={item.year}
-                cover={item.cover}
-              />
+              {/* Cover */}
+              <div className="relative aspect-[16/10] overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={item.cover}
+                  alt={`${item.title} — обложка проекта`}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover object-top
+                             transition-transform duration-[1.2s] ease-cinematic
+                             group-hover:scale-[1.05]"
+                />
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0"
+                  style={{
+                    background: `linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.12) 18%, transparent 32%), linear-gradient(180deg, transparent 40%, color-mix(in srgb, var(--bg) 75%, transparent) 80%, var(--bg) 100%), radial-gradient(120% 80% at 0% 0%, color-mix(in srgb, ${item.accent} 15%, transparent), transparent 55%)`,
+                  }}
+                />
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 top-0 h-px opacity-0 transition-opacity
+                             duration-300 group-hover:opacity-90"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, transparent, var(--member), transparent)",
+                  }}
+                />
+                <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
+                  <span
+                    className="t-meta rounded-full border px-2.5 py-1 backdrop-blur-md"
+                    style={{
+                      color: item.accent,
+                      borderColor: `color-mix(in srgb, ${item.accent} 55%, transparent)`,
+                      background: "rgba(8,8,9,0.55)",
+                    }}
+                  >
+                    {item.categoryLabel}
+                  </span>
+                  <span
+                    className="t-mono rounded-full px-2 py-1 text-xs backdrop-blur-md"
+                    style={{ color: "rgba(255,255,255,0.78)", background: "rgba(8,8,9,0.45)" }}
+                  >
+                    {item.year}
+                  </span>
+                </div>
+              </div>
 
               {/* Body */}
               <div className="relative z-[1] flex flex-1 flex-col gap-2 p-5">
@@ -110,9 +120,9 @@ export function Portfolio() {
                   {item.summary}
                 </p>
               </div>
-            </motion.article>
-          ))}
-        </AnimatePresence>
+            </Link>
+          </motion.article>
+        ))}
       </motion.div>
     </Section>
   );

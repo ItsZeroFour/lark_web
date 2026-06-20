@@ -150,7 +150,7 @@ export function Hero() {
               </Button>
             </Magnetic>
             <Magnetic>
-              <Button href="#portfolio" variant="secondary" size="lg" fullWidth>
+              <Button href="/portfolio" variant="secondary" size="lg" fullWidth>
                 Смотреть работы
               </Button>
             </Magnetic>
