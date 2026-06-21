@@ -2,6 +2,7 @@
 
 import { type CSSProperties } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -61,12 +62,12 @@ export function Portfolio() {
 
               {/* Cover */}
               <div className="relative aspect-[16/10] overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={item.cover}
                   alt={`${item.title} — обложка проекта`}
-                  loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover object-top
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover object-top
                              transition-transform duration-[1.2s] ease-cinematic
                              group-hover:scale-[1.05]"
                 />

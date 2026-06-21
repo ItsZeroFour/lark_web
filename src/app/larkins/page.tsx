@@ -7,6 +7,14 @@ export const metadata: Metadata = {
   title: "Larkins — coming soon",
   description:
     "Larkins — AI-ассистент нового поколения для вашего бизнеса. Интеллектуальный слой агентства Lark Freelance.",
+  alternates: { canonical: "/larkins" },
+  openGraph: {
+    type: "website",
+    url: "/larkins",
+    title: "Larkins — coming soon · Lark Freelance",
+    description:
+      "Larkins — AI-ассистент нового поколения для вашего бизнеса.",
+  },
 };
 
 /** /larkins — dedicated cinematic teaser page. */

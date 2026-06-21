@@ -12,6 +12,14 @@ export const metadata: Metadata = {
   title: "Портфолио — Lark Freelance",
   description:
     "Работы, которые ушли в прод: лендинги, e-commerce, промо-кампании и интерактивные игры. Реальные проекты агентства Lark Freelance.",
+  alternates: { canonical: "/portfolio" },
+  openGraph: {
+    type: "website",
+    url: "/portfolio",
+    title: "Портфолио — Lark Freelance",
+    description:
+      "Лендинги, e-commerce, промо-кампании и интерактивные игры — реальные проекты Lark Freelance.",
+  },
 };
 
 /** /portfolio — full gallery of delivered work. */

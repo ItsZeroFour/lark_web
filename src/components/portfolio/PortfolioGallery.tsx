@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type CSSProperties } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@/components/ui/Icon";
 import { Spotlight } from "@/components/ui/Spotlight";
@@ -93,12 +94,17 @@ export function PortfolioGallery() {
                       wide ? "aspect-[16/9] lg:aspect-[21/9]" : "aspect-[16/10]",
                     )}
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                       src={item.cover}
                       alt={`${item.title} — обложка проекта`}
-                      loading={i < 2 ? "eager" : "lazy"}
-                      className="absolute inset-0 h-full w-full object-cover object-top
+                      fill
+                      priority={i < 2}
+                      sizes={
+                        wide
+                          ? "(min-width: 640px) 100vw, 100vw"
+                          : "(min-width: 1024px) 50vw, (min-width: 640px) 50vw, 100vw"
+                      }
+                      className="object-cover object-top
                                  transition-transform duration-[1.2s] ease-cinematic
                                  group-hover:scale-[1.05]"
                     />

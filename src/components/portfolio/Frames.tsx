@@ -1,5 +1,7 @@
 import type { CSSProperties } from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { getImageSize } from "@/data/imageSizes";
 
 /**
  * Device frames that wrap raw screenshots in believable chrome. The premium
@@ -16,6 +18,7 @@ interface BrowserFrameProps {
 
 /** Desktop capture inside a calm browser window. */
 export function BrowserFrame({ src, alt, className }: BrowserFrameProps) {
+  const { width, height } = getImageSize(src);
   return (
     <div
       className={cn(
@@ -36,12 +39,13 @@ export function BrowserFrame({ src, alt, className }: BrowserFrameProps) {
           </span>
         </span>
       </div>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={src}
         alt={alt}
-        loading="lazy"
-        className="block w-full"
+        width={width}
+        height={height}
+        sizes="(min-width: 768px) 820px, 100vw"
+        className="block h-auto w-full"
       />
     </div>
   );
@@ -56,6 +60,7 @@ interface PhoneFrameProps {
 
 /** Mobile story capture inside a notched phone shell. */
 export function PhoneFrame({ src, alt, accent, className }: PhoneFrameProps) {
+  const { width, height } = getImageSize(src);
   return (
     <div
       className={cn(
@@ -79,8 +84,14 @@ export function PhoneFrame({ src, alt, accent, className }: PhoneFrameProps) {
           aria-hidden="true"
           className="absolute left-1/2 top-2 z-[2] h-4 w-20 -translate-x-1/2 rounded-full bg-bg-tertiary"
         />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={alt} loading="lazy" className="block w-full" />
+        <Image
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          sizes="260px"
+          className="block h-auto w-full"
+        />
       </div>
     </div>
   );

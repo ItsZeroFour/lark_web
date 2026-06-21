@@ -10,6 +10,18 @@ import { Larkins } from "@/components/sections/Larkins";
 import { FAQ } from "@/components/sections/FAQ";
 import { Contact } from "@/components/sections/Contact";
 import { Freelancers } from "@/components/sections/Freelancers";
+import { faq } from "@/data/faq";
+
+/** FAQ structured data — eligible for rich results in search. */
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+};
 
 /**
  * Lark Freelance — home.
@@ -18,6 +30,10 @@ import { Freelancers } from "@/components/sections/Freelancers";
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <Navbar />
       <main>
         <Hero />

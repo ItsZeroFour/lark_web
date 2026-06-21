@@ -4,6 +4,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { CaseStudy } from "@/components/portfolio/CaseStudy";
 import { portfolio, getPortfolioItem } from "@/data/portfolio";
+import { getImageSize } from "@/data/imageSizes";
+import { SITE_URL } from "@/lib/site";
 
 interface PageProps {
   params: { slug: string };
@@ -17,13 +19,26 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: PageProps): Metadata {
   const item = getPortfolioItem(params.slug);
   if (!item) return { title: "Проект не найден — Lark Freelance" };
+  const { width, height } = getImageSize(item.cover);
+  const path = `/portfolio/${item.slug}`;
   return {
     title: `${item.title} — ${item.categoryLabel} · Lark Freelance`,
     description: `${item.client}. ${item.summary}`,
+    alternates: { canonical: path },
     openGraph: {
+      type: "article",
+      url: path,
       title: `${item.title} — Lark Freelance`,
       description: item.summary,
-      images: [{ url: item.cover }],
+      images: [
+        { url: item.cover, width, height, alt: `${item.title} — обложка проекта` },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${item.title} — Lark Freelance`,
+      description: item.summary,
+      images: [item.cover],
     },
   };
 }
@@ -36,8 +51,49 @@ export default function CaseStudyPage({ params }: PageProps) {
   const index = portfolio.findIndex((p) => p.slug === item.slug);
   const next = portfolio[(index + 1) % portfolio.length];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CreativeWork",
+        name: item.title,
+        headline: item.tagline,
+        description: item.summary,
+        url: `${SITE_URL}/portfolio/${item.slug}`,
+        image: `${SITE_URL}${item.cover}`,
+        dateCreated: item.year,
+        inLanguage: "ru-RU",
+        keywords: item.services.join(", "),
+        creator: { "@type": "Organization", name: "Lark Freelance", url: SITE_URL },
+        about: item.client,
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Главная", item: SITE_URL },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Портфолио",
+            item: `${SITE_URL}/portfolio`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: item.title,
+            item: `${SITE_URL}/portfolio/${item.slug}`,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar />
       <main>
         <CaseStudy item={item} next={next} />

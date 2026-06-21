@@ -2,6 +2,7 @@
 
 import { useState, type CSSProperties } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { GridBackdrop } from "@/components/ui/GridBackdrop";
@@ -35,11 +36,13 @@ export function CaseStudy({ item, next }: CaseStudyProps) {
           style={{ y: coverY, scale: coverScale }}
           className="absolute inset-0 -z-10"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={item.cover}
             alt={`${item.title} — обложка`}
-            className="h-full w-full object-cover object-top"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-top"
           />
         </motion.div>
         {/* Wash for legibility + brand tint */}
