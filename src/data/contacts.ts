@@ -12,9 +12,9 @@ export const contact = {
   },
   phone: {
     /** Display form. */
-    label: "+7 (978) 000-00-00",
+    label: "+7 (978) 679-10-16",
     /** tel: form — digits only with leading +. */
-    href: "tel:+79780000000",
+    href: "tel:+79786791016",
   },
   email: {
     label: "hello@larkfreelance.dev",

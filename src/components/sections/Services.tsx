@@ -100,12 +100,6 @@ export function Services() {
 
               {/* Footer — identical on every card, pinned to the bottom edge */}
               <div className="relative mt-auto flex flex-col gap-3.5 border-t border-border pt-4">
-                <div className="flex items-baseline justify-between gap-2">
-                  <span className="t-meta text-text-faint">Стоимость</span>
-                  <span className="font-display text-base text-text tabular-nums">
-                    {service.price}
-                  </span>
-                </div>
                 <span className="flex items-center gap-1.5 text-sm font-medium text-accent">
                   {service.featured ? "Открыть Larkins" : "Обсудить задачу"}
                   <Icon
