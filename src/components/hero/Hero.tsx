@@ -5,7 +5,6 @@ import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer
 import { HeroBackground } from "./HeroBackground";
 import { Button } from "@/components/ui/Button";
 import { Magnetic } from "@/components/ui/Magnetic";
-import { KissingCTAs } from "@/components/ui/KissingCTAs";
 import { Icon } from "@/components/ui/Icon";
 import { revealVariants, staggerContainer } from "@/hooks/useReveal";
 import { contact } from "@/data/contacts";
@@ -18,13 +17,13 @@ type Stat = {
   label: string;
   num?: number;
   suffix?: string;
-  kind?: "count" | "static" | "eta";
+  kind?: "count" | "static";
 };
 
 const stats: Stat[] = [
-  { value: "4", label: "человека в ядре команды", num: 4, kind: "count" },
+  { value: "10+", label: "проектов запущено", num: 10, suffix: "+", kind: "count" },
   { value: "AI", label: "native-процессы", kind: "static" },
-  { value: "1 час", label: "до первого ответа", num: 1, suffix: " час", kind: "eta" },
+  { value: "100%", label: "проектов в срок", num: 100, suffix: "%", kind: "count" },
 ];
 
 const capabilities = [
@@ -135,32 +134,26 @@ export function Hero() {
             Для бизнеса, который думает вперёд.
           </motion.p>
 
-          {/* CTAs — kissing pair: lips + hearts when magnetic pull aligns them */}
+          {/* CTAs */}
           <motion.div
             variants={revealVariants("up")}
-            className="mt-9 w-full xs:w-auto"
+            className="mt-9 flex w-full flex-col gap-3 xs:w-auto xs:flex-row xs:items-center"
           >
-            <KissingCTAs
-              primary={
-                <Magnetic>
-                  <Button href="#contact" variant="primary" size="lg" fullWidth>
-                    Обсудить проект
-                    <Icon
-                      name="arrow-right"
-                      size={17}
-                      className="transition-transform duration-300 group-hover:translate-x-0.5"
-                    />
-                  </Button>
-                </Magnetic>
-              }
-              secondary={
-                <Magnetic>
-                  <Button href="#portfolio" variant="secondary" size="lg" fullWidth>
-                    Смотреть работы
-                  </Button>
-                </Magnetic>
-              }
-            />
+            <Magnetic>
+              <Button href="#contact" variant="primary" size="lg" fullWidth>
+                Обсудить проект
+                <Icon
+                  name="arrow-right"
+                  size={17}
+                  className="transition-transform duration-300 group-hover:translate-x-0.5"
+                />
+              </Button>
+            </Magnetic>
+            <Magnetic>
+              <Button href="/portfolio" variant="secondary" size="lg" fullWidth>
+                Смотреть работы
+              </Button>
+            </Magnetic>
           </motion.div>
 
           {/* Trust line + idle nudge */}
@@ -185,15 +178,6 @@ export function Hero() {
           >
             {stats.map((s, i) => {
               const border = i > 0 ? "border-l border-border" : "";
-              if (s.kind === "eta") {
-                return (
-                  <LiveEtaCell
-                    key={s.label}
-                    delay={1.4 + i * 0.08}
-                    className={border}
-                  />
-                );
-              }
               return (
                 <div
                   key={s.label}
@@ -253,86 +237,6 @@ export function Hero() {
         </div>
       </motion.div>
     </section>
-  );
-}
-
-/**
- * Easter egg #10 — clicking the "1 час" stat reveals a live countdown to
- * the next response checkpoint (top of the next hour). Toggles back to the
- * idle "1 час" display on second click.
- */
-function LiveEtaCell({
-  delay,
-  className = "",
-}: {
-  delay: number;
-  className?: string;
-}) {
-  const [live, setLive] = useState(false);
-  const [text, setText] = useState("00:00");
-
-  useEffect(() => {
-    if (!live) return;
-    const compute = () => {
-      const now = new Date();
-      const target = new Date(now);
-      target.setHours(now.getHours() + 1, 0, 0, 0);
-      const diff = Math.max(0, target.getTime() - now.getTime());
-      const m = Math.floor(diff / 60000);
-      const s = Math.floor((diff % 60000) / 1000);
-      setText(
-        `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`,
-      );
-    };
-    compute();
-    const id = window.setInterval(compute, 1000);
-    return () => window.clearInterval(id);
-  }, [live]);
-
-  return (
-    <div
-      role="button"
-      tabIndex={0}
-      aria-pressed={live}
-      aria-label={
-        live ? "Скрыть живой обратный отсчёт" : "Показать живой обратный отсчёт"
-      }
-      onClick={() => setLive((v) => !v)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          setLive((v) => !v);
-        }
-      }}
-      className={`group relative flex flex-1 cursor-pointer flex-col items-center gap-1.5 px-3 py-5 outline-none transition-colors duration-300 hover:bg-bg-tertiary/40 focus-visible:bg-bg-tertiary/40 ${className}`}
-    >
-      {live && (
-        <span
-          aria-hidden="true"
-          className="absolute right-2 top-2 grid h-1.5 w-1.5 place-items-center"
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-          <span className="anim-ping-soft absolute inset-0 rounded-full bg-accent" />
-        </span>
-      )}
-      <dt className="font-display text-2xl amber tabular-nums sm:text-3xl">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.span
-            key={live ? "live" : "idle"}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-block"
-          >
-            {live ? text : <CountUp to={1} delay={delay} suffix=" час" />}
-          </motion.span>
-        </AnimatePresence>
-      </dt>
-      <dd className="text-center text-[0.66rem] leading-tight text-text-muted">
-        {live ? "до окна ответа" : "до первого ответа"}
-      </dd>
-    </div>
   );
 }
 

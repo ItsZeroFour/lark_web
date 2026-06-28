@@ -17,7 +17,7 @@ const footerNav = [
       { label: "Кто мы", href: "/#about" },
       { label: "Услуги", href: "/#services" },
       { label: "Процесс", href: "/#process" },
-      { label: "Работы", href: "/#portfolio" },
+      { label: "Работы", href: "/portfolio" },
     ],
   },
   {

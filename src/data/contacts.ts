@@ -27,5 +27,5 @@ export const contact = {
   },
   location: "Крым · работаем удалённо",
   /** Typical first-response time — used as a conversion signal. */
-  responseTime: "в течение часа",
+  responseTime: "за 15 минут",
 } as const;

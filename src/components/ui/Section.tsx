@@ -26,7 +26,10 @@ export function Section({
     <section
       id={id}
       className={cn(
-        "relative scroll-mt-24 py-16 sm:py-20 lg:py-24",
+        // overflow-x-clip keeps decorative glows/folios from pushing the page
+        // wider than the viewport (horizontal scroll on mobile) without
+        // clipping vertical overflow or creating a scroll container.
+        "relative scroll-mt-24 overflow-x-clip py-16 sm:py-20 lg:py-24",
         className,
       )}
     >

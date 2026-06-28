@@ -1,6 +1,7 @@
 "use client";
 
 import { type CSSProperties } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -36,7 +37,6 @@ export function Team() {
               variants={revealVariants("up")}
               whileHover={{ y: -4 }}
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
-              tabIndex={0}
               style={
                 {
                   "--member": member.accent,
@@ -71,11 +71,12 @@ export function Team() {
                 }}
               >
                 {member.photo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <Image
                     src={member.photo}
                     alt={`${member.name} — ${member.caption}`}
-                    className="h-full w-full object-cover transition-transform
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 480px) 50vw, 100vw"
+                    className="object-cover transition-transform
                                duration-500 ease-cinematic group-hover/card:scale-[1.04]"
                   />
                 ) : (
